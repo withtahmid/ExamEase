@@ -1,0 +1,15 @@
+const mongoose = require('mongoose');
+
+const answerSchema = new mongoose.Schema({
+    question: {
+        type:mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Question'
+    },
+
+    student: String,
+    text:String,
+    audio: String
+});
+
+module.exports = mongoose.model('Answer', answerSchema);

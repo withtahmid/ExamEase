@@ -1,0 +1,8 @@
+POST http://localhost:3000/users/tahmid
+content-type: application/json
+{
+    "name": "Tahmid Ahmed ddfe  ",
+    "email": "tahmid@gmail.com",
+    "password": "password",
+    "role": "student"
+}

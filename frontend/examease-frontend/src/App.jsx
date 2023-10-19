@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Dashboard from './routes/DashBoard';
+import Dashboard from './routes/Dashboard';
 import NotFound from './routes/NotFound';
 import SignIn from './routes/SignIn';
 import Settings from './routes/Settings';

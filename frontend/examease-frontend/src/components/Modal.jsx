@@ -2,7 +2,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
-import ReactHtmlParser from 'react-html-parser';
+// import ReactHtmlParser from 'react-html-parser';
 import { useNavigate } from 'react-router-dom';
 
 function getWhitespaces(n) {
@@ -90,7 +90,7 @@ export default function Modal(props) {
                                                 {/* <p className="invisible text-sm text-gray-600">Use a permanent address where you can receive mail.</p> */}
                                                 {/* <div dangerouslySetInnerHTML={getWhitespaces(200)}></div> */}
 
-                                                {ReactHtmlParser(getWhitespaces(200))}
+                                                {/* {ReactHtmlParser(getWhitespaces(200))} */}
 
                                                 <div className=" flex flex-col space-y-4">
                                                     <div className="sm:col-span-3">

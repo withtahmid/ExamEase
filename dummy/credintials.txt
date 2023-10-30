@@ -1,0 +1,60 @@
+{
+    "name": "Md Tahmid",
+    "email": "tahmid@northsouth.edu",
+    "role" : "",
+    "password": "password"
+}
+
+{
+    "success": true,
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhaG1pZEBub3J0aHNvdXRoLmVkdSIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNjk3NzQxNTM4LCJleHAiOjE2OTgzNDYzMzh9.aQlqxJ094ftrAFXpepTkHW91d0ZmpjWGL01mGnPhxXo",
+    "message": "User found successfull"
+}
+
+{
+    "name": "Md Tahmid",
+    "email": "withtahmid@northsouth.edu",
+    "role" : "",
+    "password": "password"
+}
+
+{
+    "success": true,
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndpdGh0YWhtaWRAbm9ydGhzb3V0aC5lZHUiLCJyb2xlIjoiZmFjdWx0eSIsImlhdCI6MTY5NzU1ODQxOCwiZXhwIjoxNjk4MTYzMjE4fQ.Lp445HgNDpwVy7JhQFCbaBMWJdFjgAVjtLcRSeDln6c",
+    "message": "User found successfull"
+}
+
+
+{
+    "success": true,
+    "user": {
+        "name": "Md Tahmid",
+        "email": "withtahmid@northsouth.edu",
+        "role": "faculty",
+        "cohorts": {
+            "65230743eea3f23cf714f21e": "This is new cohort",
+            "65230c4369e14cc05b0cade5": "This is new cohort 2",
+            "65230e5d4e721d38f0656ed5": "This is new cohort 2",
+            "6523f767dcdf68e5409c7af2": "This is new cohort 4",
+            "6523f7bfeb89100ee0ab53e9": "Sundor Ekta Naam" // 652ebd29d3388d9d5d650ad0 // 652ec1fb95da06c05eb51157
+        }
+    }
+}
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImF1emlzYmVzdEBnbWFpbC5jb20iLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTY5Nzc0MjE4OCwiZXhwIjoxNjk4MzQ2OTg4fQ.MRyRDckKd7dIEicISs-ZI65xDvLKRdzIeq7kr-cpFFk
+
+exam id : 65303c7ce9d5ffb437ae4838
+653191cfd7808f2b6152c5e7
+
+
+
+
+{
+    "targetCohortId": "6532c2a58fcb59c2be050ba1",
+    "title" : "Midterm Exam",
+    "color": 1,
+    "description": "This is a general Description",
+    "startTime": "2023-10-18T21:00:00.000Z",
+    "endTime": "2023-10-18T22:00:00.000Z",
+    "duration": 40
+}

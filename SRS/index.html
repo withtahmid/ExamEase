@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="CSS/style.css">
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
+	<title>Software Requirements Specification</title>
+</head>
+
+<body>
+
+	<div class="index" id="index">
+		<h1 style="text-align: center;">Index<h1>
+				<div class="accordion-item" id="index-1">
+					<div onclick="smoothScrollTo('topic-1'); indexDropdownToggle('index-1');" class="accordion-header">
+						1. Introduction</div>
+					<div class="accordion-content">
+						<p onclick="smoothScrollTo('topic-1.1')">1.1 Purpose</p>
+						<p onclick="smoothScrollTo('topic-1.2')">1.2 Document Conventions</p>
+						<p onclick="smoothScrollTo('topic-1.3')">1.3 Intended Audience and Reading Suggestions.</p>
+						<p onclick="smoothScrollTo('topic-1.4')">1.4 Product Scope</p>
+						<p onclick="smoothScrollTo('topic-1.5')">1.5 References</p>
+					</div>
+				</div>
+
+				<div class="accordion-item" id="index-2">
+					<div onclick="smoothScrollTo('topic-2'); indexDropdownToggle('index-2');" class="accordion-header">
+						2. Overall Description</div>
+					<div class="accordion-content">
+						<p onclick="smoothScrollTo('topic-2.1')">2.1 Product Perspective</p>
+						<p onclick="smoothScrollTo('topic-2.2')">2.2 Product Functions</p>
+						<p onclick="smoothScrollTo('topic-2.3')">2.3 User Classes and Characteristics</p>
+						<p onclick="smoothScrollTo('topic-2.4')">2.4 Operating Environment.</p>
+						<p onclick="smoothScrollTo('topic-2.5')">2.5 Design and Implementation Constraints.</p>
+						<p onclick="smoothScrollTo('topic-2.6')">2.6 User Documentation .</p>
+						<p onclick="smoothScrollTo('topic-2.7')">2.7 Assumptions and Dependencies .</p>
+					</div>
+				</div>
+
+				<div class="accordion-item" id="index-3">
+					<div onclick="smoothScrollTo('topic-3'); indexDropdownToggle('index-3');" class="accordion-header">
+						3. External Interface Requirements</div>
+					<div class="accordion-content">
+						<p onclick="smoothScrollTo('topic-3.1')">3.1 User Interfaces</p>
+						<p onclick="smoothScrollTo('topic-3.2')">3.2 Hardware Interfaces</p>
+						<p onclick="smoothScrollTo('topic-3.3')">3.3 Software Interfaces</p>
+						<p onclick="smoothScrollTo('topic-3.4')">3.4 Communications Interfaces</p>
+					</div>
+				</div>
+
+				<div class="accordion-item" id="index-4">
+					<div onclick="smoothScrollTo('topic-4');indexDropdownToggle('index-4');" class="accordion-header">4.
+						System Features</div>
+					<div class="accordion-content">
+						<p onclick="smoothScrollTo('topic-4.1')">4.1 Sign Up</p>
+						<p onclick="smoothScrollTo('topic-4.2')">4.2 Login</p>
+						<p onclick="smoothScrollTo('topic-4.3')">4.3 Create Cohort</p>
+						<p onclick="smoothScrollTo('topic-4.4')">4.4 Add Students in Cohort</p>
+						<p onclick="smoothScrollTo('topic-4.5')">4.5 Create Examination</p>
+						<p onclick="smoothScrollTo('topic-4.6')">4.6 Attending Examination</p>
+						<p onclick="smoothScrollTo('topic-4.7')">4.7 Re-Evaluate Examination</p>
+						<p onclick="smoothScrollTo('topic-4.8')">4.8 Publish Score</p>
+						<p onclick="smoothScrollTo('topic-4.9')">4.9 View Exam Summery</p>
+						<p onclick="smoothScrollTo('topic-4.10')">4.10 Create Dispute</p>
+						<p onclick="smoothScrollTo('topic-4.11')">4.11 Auto-Proctoring</p>
+						<p onclick="smoothScrollTo('topic-4.12')">4.12 Auto-Marking</p>
+						<p onclick="smoothScrollTo('topic-4.13')">4.13 Maintain Schedule</p>
+						<p onclick="smoothScrollTo('topic-4.14')">4.14 Create Exam Summery</p>
+						<p onclick="smoothScrollTo('topic-4.15')">4.15 Send Login Invitation</p>
+					</div>
+				</div>
+
+				<div class="accordion-item" id="index-5">
+					<div onclick="smoothScrollTo('topic-5');indexDropdownToggle('index-5');" class="accordion-header">5.
+						Other Nonfunctional Requirements</div>
+					<div class="accordion-content">
+						<p onclick="smoothScrollTo('topic-5.1')">5.1 Performance Requirements.</p>
+						<p onclick="smoothScrollTo('topic-5.2')">5.2 Safety Requirements</p>
+						<p onclick="smoothScrollTo('topic-5.3')">5.3 Security Requirements</p>
+						<p onclick="smoothScrollTo('topic-5.4')">5.4 Software Quality Attributes</p>
+						<p onclick="smoothScrollTo('topic-5.5')">5.5 Business Rules</p>
+
+					</div>
+				</div>
+				<div class="accordion-item" id="index-6">
+					<div onclick="smoothScrollTo('topic-6');indexDropdownToggle();" class="accordion-header">6. Other
+						Requirements</div>
+				</div>
+				<div class="accordion-item" id="index-7">
+					<div onclick="smoothScrollTo('topic-7');indexDropdownToggle();" class="accordion-header">Appendix A:
+						Glossary</div>
+				</div>
+				<div class="accordion-item" id="index-8">
+					<div onclick="smoothScrollTo('topic-8');indexDropdownToggle();" class="accordion-header">Appendix B:
+						Analysis Models</div>
+				</div>
+				<div class="accordion-item" id="index-9">
+					<div onclick="smoothScrollTo('topic-9');indexDropdownToggle();" class="accordion-header">Appendix C:
+						To Be Determined List</div>
+				</div>
+	</div>
+	<!-- End of Index -->
+
+	<!-- Start of content -->
+	<section class="content">
+		<h1 style="text-align: center;">Software Requirements Specification<h1>
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-1">
+					<p class="topic-heading">1. Introduction.</p>
+					<!--  -->
+					<div class="sub-topic" id="topic-1.1">
+						<p class="sub-topic-heading">1.1 Purpose</p>
+						<p class="sub-topic-content">
+							This document delineates the first version of the software prerequisites for the online exam
+							cohort system. It presents the client's software requirements clearly and comprehensively,
+							as detailed by the business analyst team, with a focus on precision in all aspects.
+							Encompassing the entirety of the exam-cohort system's requisites, this document extends
+							beyond subsystems or isolated components.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-1.2">
+						<p class="sub-topic-heading">1.2 Document Conventions</p>
+						<p class="sub-topic-content">
+							The document employs the "Arial, sans-serif" font, with 'font size 26px' utilized for titles
+							and 'font size 22px' for sub-titles. It adheres to the IEEE standard for creating a
+							"Software Requirement Specification (SRS)."</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-1.3">
+						<p class="sub-topic-heading">1.3 Intended Audience and Reading Suggestions.</p>
+						<p class="sub-topic-content">
+							The document targets several audiences including Business Clients, System Design Engineers,
+							Quality Assurance Engineers, Project Managers, and future maintenance teams. It serves as a
+							crucial link between the business analyst and the client, ensuring the accuracy of
+							requirements and bridging any gaps to save time, cost, and resources. System designers, upon
+							gaining a full understanding of project requirements, can proceed with their System Design
+							Specifications (SDS). Project managers use this document to comprehensively plan projects
+							and select suitable development strategies like agile or waterfall, prioritizing high-impact
+							use cases to optimize resource utilization.
+
+							Quality assurance teams engineer test plans based on the SRS requirements to verify software
+							implementation aligns with client needs. During maintenance periods, this document acts as a
+							fail-safe resource, providing insight into the software's purpose, scope, parameters, and
+							objectives when the original team is unavailable. It's advisable to limit access to this
+							document to software developers to ensure reliance on the SDS, thereby allowing the Quality
+							Assurance team to detect design flaws or inefficiencies during testing. This enables
+							iterative improvements in subsequent iterations.
+
+							For effective comprehension, it's suggested to follow the order outlined in the "Table of
+							Contents" of the SRS document.</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-1.4">
+						<p class="sub-topic-heading">1.4 Product Scope</p>
+						<p class="sub-topic-content">
+							The "Exam-Ease" system facilitates the opportunity for individuals to engage in online
+							examination procedures. This software framework caters to two distinct user categories:
+							Faculty and students. A primary aim of this software is to establish an online platform that
+							serves as a substitute for traditional in-person exams. Nonetheless, the principal
+							distinguishing factor of this software lies in its Micro-Viva functionality and
+							Auto-Proctoring system.
+
+							The Micro-Viva feature involves presenting candidates with Faculty-generated questions in
+							the form of voice recordings. In response, students utilize an integrated system feature to
+							record their vocal responses for the Micro-Viva questions. On the other hand, the
+							Auto-Proctoring system utilizes facial recognition technology to verify the identity of the
+							student undertaking the examination and to identify any potentially suspicious activities.
+
+							Ensuring robust security measures, the software diligently safeguards against any
+							inadvertent disclosure of answers, thus maintaining the integrity of the examination system.
+							Moreover, the software is compatible with various educational contexts, including learning
+							management systems, educational institutions, and modern EdTech businesses. As a result, it
+							can seamlessly integrate with these establishments or enterprises.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-1.5">
+						<p class="sub-topic-heading">1.5 References</p>
+						<p class="sub-topic-content">
+							IEEE Guide for Software Requirements Specifications
+						</p>
+					</div>
+					<!--  -->
+				</div>
+				<!-- End of Topic Template -->
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-2">
+					<p class="topic-heading">2. Overall Description</p>
+					<!--  -->
+					<div class="sub-topic" id="topic-2.1">
+						<p class="sub-topic-heading">2.1 Product Perspective</p>
+						<p class="sub-topic-content">
+							This offering constitutes an element of the software engineering course evaluation during
+							the summer academic term of 2023 at North South University. The concept for this project was
+							put forth by a faculty member who took on the role of the "client." In turn, a group of
+							students assumed the role of an imaginative software firm to execute the tasks. The
+							resultant product materializes as a novel, standalone system, distinct from both any
+							existing product lineage and any preexisting system it doesn't supplant.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-2.2">
+						<p class="sub-topic-heading">2.2 Product Functions</p>
+						<p class="sub-topic-content">
+							The product should enable users to register within the system using a valid email address.
+							During the registration process, users will select their role as either a faculty member or
+							a student. Faculty members possess the authorization to establish new cohorts and include
+							students by using their respective email addresses. In cases where the added email address
+							is not yet registered within the system, an invitation will be dispatched to that email
+							address.
+
+							Faculty members are empowered to create exams within a cohort, with each exam having the
+							capacity to encompass multiple questions. Students who have been included in a cohort are
+							eligible to participate in the exams. The exams can be scheduled with flexibility and set to
+							a specific duration. Upon exam completion, the system will undertake automated exam grading
+							and generate an exam summary for each student. This summary might include indications of
+							tab-switching, communication with others, absence in front of the camera, and similar
+							factors.
+
+							Faculty members retain the ability to release the exam scores. Following the release of
+							scores, students have the option to raise disputes regarding their exam results, attaching
+							specific comments. In response, faculty members can proceed to manually re-evaluate the
+							answers as necessary.
+						</p>
+						<div style="display: flex; align-items: center; justify-content: center;">
+							<img src="Img/uses-diagram.png"></img>
+						</div>
+
+
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-2.3">
+						<p class="sub-topic-heading">2.3 User Classes and Characteristics</p>
+						<p class="sub-topic-content">
+							Every user possesses the capability to log into the system by using a valid email address.
+							Exclusive to faculty members is the ability to initiate the creation of an exam cohort.
+							Within each established exam cohort, faculty members, in addition to including candidates
+							via email, hold the privilege to design multiple examinations. Moreover, within each exam,
+							faculties can incorporate multiple-choice questions (MCQs), short-text queries, and
+							Micro-viva questions. They can also readjust student scores and furnish assessment details
+							such as availability date-time and duration.
+							<br>
+							In instances where a student added to a cohort isn't already registered in the Exam-Ease
+							system, they will receive an invitation link for registration and automatically be
+							integrated into the cohort. MCQs encompass standard multiple-choice questions, which may
+							involve multiple correct answers. In such cases, candidates need to select all applicable
+							answers to secure points for the question. Short-text answers require students to type out
+							their responses.
+							<br>
+							Viva questions and responses exclusively employ voice recordings. Both evaluators and
+							candidates have the capability to record their voices or listen to previously recorded
+							content within the software's provided user interface. Faculty members will record their
+							voices while adding micro-viva questions or specifying correct micro-viva answers. During
+							assessments, candidates can listen to micro-viva questions and provide recorded voice
+							answers. When evaluators need to adjust a candidate's assessment score, they can listen to
+							micro-viva responses and review short-text and MCQ answers.
+							<br>
+							The system undertakes automated assessment grading and generates a summary of the exam
+							results for each student, including indicators of suspicious activity. Following the exam's
+							conclusion, faculty members publish the grades. Students are empowered to initiate a dispute
+							for a specific examination, attaching requisite comments for manual evaluation.
+							Subsequently, faculty members can modify the marks accordingly.
+
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-2.4">
+						<p class="sub-topic-heading">2.4 Operating Environment</p>
+						<p class="sub-topic-content">
+							The software is designed to function on both web applications and Android devices. To ensure
+							proper operation, the operating environment must include a functioning microphone for voice
+							recording. It is advisable to avoid employing outdated versions of the Android operating
+							system and instead opt for a relatively contemporary web browser.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-2.5">
+						<p class="sub-topic-heading">2.5 Design and Implementation Constraints</p>
+						<p class="sub-topic-content">
+							The client's specifications entail the inclusion of short-text and voice answers within the
+							software, with automatic evaluation. Consequently, the software's language scope is confined
+							to English.
+							<br>
+							To ensure security, students are limited to participating in a particular exam of an
+							assigned exam-cohort, designated by the respective faculty member of the cohort. Students
+							are restricted from accessing exam cohorts that haven't been assigned to them by faculty
+							members. This principle also applies to exams that aren't part of any exam cohort from the
+							student's assigned cohort listings.
+							<br>
+							Moreover, to prevent any potential leakage of correct answers, questions and answer options
+							presented to a student during an assessment will be randomly arranged. The integrity of the
+							assessment process is maintained across all interfaces interacting with students. In the
+							event that an exam's time limit is exceeded, the system will automatically detect this
+							circumstance and promptly submit the student's answers.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-2.6">
+						<p class="sub-topic-heading">2.6 User Documentation</p>
+						<p class="sub-topic-content">
+							The software package includes both a user manual and a brief video intended for individuals
+							without technical expertise. This video provides instructions on "software installation and
+							usage.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-2.7">
+						<p class="sub-topic-heading">2.7 Assumptions and Dependencies</p>
+						<p class="sub-topic-content">
+							The software presupposes that users' devices are equipped with internet connectivity and can
+							effectively utilize both the web application and Android app interfaces. Moreover, it is
+							expected that users possess the necessary hardware components, such as a microphone for
+							voice recording and a camera. The functionality of this software hinges on the utilization
+							of external APIs like the Face-Verification API and machine learning-based speech-to-text
+							APIs. Consequently, a significant aspect that sets this software apart rests on the
+							effectiveness of these external machine learning models. It is assumed that these models
+							perform adequately. It's worth noting that any discrepancies or alterations in these
+							assumptions or dependencies can potentially impact the project's progression and outcome.
+						</p>
+					</div>
+					<!--  -->
+				</div>
+				<!-- End of Topic Template -->
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-3">
+					<p class="topic-heading">3. External Interface Requirements</p>
+					<!--  -->
+					<div class="sub-topic" id="topic-3.1">
+						<p class="sub-topic-heading">3.1 User Interfaces: Student</p>
+						<div class="sub-sub-topic">
+
+							<p class="sub-topic-content">The Student Interface is designed to provide students with
+								a
+								user-friendly experience
+								for accessing exams, receiving notifications, and interacting with the system.</p>
+
+							<div>
+								<p class="sub-sub-topic-heading">
+									3.1.1 Sign-Up Page
+								</p>
+								<p class="sub-sub-topic-heading">
+									Purpose: Allows new students to create an account using their Google account.
+								</p>
+								<p class="sub-sub-topic-heading">
+									Components:
+								</p>
+								<ul>
+									<li class="sub-topic-content">"Sign Up with Google" button</li>
+									<li class="sub-topic-content">Link to the login page for returning students</li>
+								</ul>
+							</div>
+							<div>
+								<p class="sub-sub-topic-heading">
+									3.1.2 Login Page
+								</p>
+								<p class="sub-sub-topic-heading">
+									Purpose: Allows registered students to log in to their accounts using their Google
+									account or standard credentials.
+								</p>
+								<p class="sub-sub-topic-heading">
+									Components:
+								</p>
+								<ul>
+									<li class="sub-topic-content">
+										"Sign In with Google" button
+									</li>
+									<li class="sub-topic-content">
+										Username/Email field
+									</li>
+									<li class="sub-topic-content">
+										Password field
+									</li>
+									<li class="sub-topic-content">
+										"Login" button
+									</li>
+									<li class="sub-topic-content">
+										"Forgot Password" link
+									</li>
+								</ul>
+							</div>
+							<div>
+								<p class="sub-sub-topic-heading">
+									3.1.3 Dashboard
+								</p>
+								<p class="sub-sub-topic-heading">
+									Purpose: Provides an overview of upcoming exams, recent results, and notifications.
+								</p>
+								<p class="sub-sub-topic-heading">
+									Components:
+								</p>
+								<ul>
+									<li class="sub-topic-content">
+										List of upcoming exams with links
+									</li>
+									<li class="sub-topic-content">
+										Recent exam results with details
+									</li>
+									<li class="sub-topic-content">
+										Notification panel
+									</li>
+								</ul>
+							</div>
+							<div>
+								<p class="sub-sub-topic-heading">
+									3.1.4 Exam Taking Interface
+
+								</p>
+								<p class="sub-sub-topic-heading">
+									Purpose: Allows students to take exams during the designated 2-hour window.
+								</p>
+								<p class="sub-sub-topic-heading">
+									Components:
+								</p>
+								<ul>
+									<li class="sub-topic-content">
+										Exam instructions and timer
+									</li>
+									<li class="sub-topic-content">
+										Question navigation (next, previous)
+									</li>
+									<li class="sub-topic-content">
+										Exam instructions and timer
+									</li>
+									<li class="sub-topic-content">
+										Text and Voice input fields for answers
+									</li>
+									<li class="sub-topic-content">
+										Camera status indicator
+									</li>
+									<li class="sub-topic-content">
+										Submit button
+									</li>
+								</ul>
+							</div>
+							<div>
+								<p class="sub-sub-topic-heading">
+									3.1.5 Results Page
+
+								</p>
+								<p class="sub-sub-topic-heading">
+									Purpose: Displays automatic exam results and allows students to raise disputes.
+								</p>
+								<p class="sub-sub-topic-heading">
+									Components:
+								</p>
+								<ul>
+									<li class="sub-topic-content">
+										Exam scores and feedback
+									</li>
+									<li class="sub-topic-content">
+										Option to raise a dispute
+									</li>
+									<li class="sub-topic-content">
+										Exam statistics
+									</li>
+								</ul>
+							</div>
+							<div>
+								<p class="sub-sub-topic-heading">
+									3.1.6 Profile Settings
+
+								</p>
+								<p class="sub-sub-topic-heading">
+									Purpose: Allows students to manage their profile and account settings.
+								</p>
+								<p class="sub-sub-topic-heading">
+									Components:
+								</p>
+								<ul>
+									<li class="sub-topic-content">
+										Profile picture upload
+									</li>
+									<li class="sub-topic-content">
+										Change password
+									</li>
+									<li class="sub-topic-content">
+										Email settings
+									</li>
+									<li class="sub-topic-content">
+										Notification preferences
+									</li>
+								</ul>
+							</div>
+
+						</div>
+
+
+					</div>
+					<div class="sub-topic" id="topic-3.2">
+						<p class="sub-topic-heading">3.2 User Interfaces: Teacher</p>
+						<div class="sub-sub-topic">
+
+							<p class="sub-topic-content">
+								The Teacher Interface is designed to empower teachers to manage cohorts, exams, and
+								resolve student disputes efficiently.
+							</p>
+
+							<div>
+
+								<p class="sub-sub-topic-heading">3.2.1 Sign-Up Page</p>
+								<p class="sub-sub-topic-heading">
+									Purpose: Allows new teachers to create an account using their Google account.</p>
+								<p class="sub-sub-topic-heading">
+									Components:
+								</p>
+								<ul>
+									<li class="sub-topic-content">"
+										Sign Up with Google" button
+									</li>
+									<li class="sub-topic-content">
+										Link to the login page for returning teachers
+									</li>
+								</ul>
+							</div>
+
+						</div>
+						<div>
+
+							<p class="sub-sub-topic-heading">3.2.2 Login Page</p>
+							<p class="sub-sub-topic-heading">
+								Purpose: Allows registered teachers to log in to their accounts using their Google
+								account or standard credentials.</p>
+							<p class="sub-sub-topic-heading">
+								Components:
+							</p>
+							<ul>
+								<li class="sub-topic-content">"
+									"Sign In with Google" button
+								</li>
+								<li class="sub-topic-content">
+									Username/Email field
+								</li>
+								<li class="sub-topic-content">
+									Password field
+								</li>
+								<li class="sub-topic-content">
+									"Login" button
+								</li>
+								<li class="sub-topic-content">
+									"Forgot Password" link
+								</li>
+							</ul>
+						</div>
+						<div>
+
+							<p class="sub-sub-topic-heading">3.2.3 Dashboard</p>
+							<p class="sub-sub-topic-heading">
+								Purpose: Provides an overview of cohorts, upcoming exams, and notifications.</p>
+							<p class="sub-sub-topic-heading">
+								Components:
+							</p>
+							<ul>
+								<li class="sub-topic-content">"
+									Cohort management tools
+								</li>
+								<li class="sub-topic-content">
+									List of upcoming exams with links
+								</li>
+								<li class="sub-topic-content">
+									Notification panel
+								</li>
+							</ul>
+						</div>
+						<div>
+
+							<p class="sub-sub-topic-heading">3.2.4 Cohort Management</p>
+							<p class="sub-sub-topic-heading">
+								Purpose: Allows teachers to create, edit, and manage cohorts or courses.</p>
+							<p class="sub-sub-topic-heading">
+								Components:
+							</p>
+							<ul>
+								<li class="sub-topic-content">"
+									Create new cohort form
+								</li>
+								<li class="sub-topic-content">
+									List of existing cohorts
+								</li>
+								<li class="sub-topic-content">
+									Add students to cohorts via email
+								</li>
+							</ul>
+						</div>
+						<div>
+
+							<p class="sub-sub-topic-heading">3.2.5 Exam Creation and Management</p>
+							<p class="sub-sub-topic-heading">
+								Purpose: Enables teachers to create and manage exams, including setting question types
+								and evaluation criteria.</p>
+							<p class="sub-sub-topic-heading">
+								Components:
+							</p>
+							<ul>
+								<li class="sub-topic-content">"
+									Create new exam form
+								</li>
+								<li class="sub-topic-content">
+									List of existing exams
+								</li>
+								<li class="sub-topic-content">
+									List of existing exams
+								</li>
+								<li class="sub-topic-content">
+									Exam duration settings
+								</li>
+							</ul>
+						</div>
+						<div>
+
+							<p class="sub-sub-topic-heading">3.2.6 Exam Evaluation</p>
+							<p class="sub-sub-topic-heading">
+								Purpose: Provides tools for evaluating student exams manually and resolving disputes.
+							</p>
+							<p class="sub-sub-topic-heading">
+								Components:
+							</p>
+							<ul>
+								<li class="sub-topic-content">"
+									Review student answers
+								</li>
+								<li class="sub-topic-content">
+									Review student answers
+								</li>
+								<li class="sub-topic-content">
+									Resolve disputes
+								</li>
+							</ul>
+						</div>
+						<div>
+
+							<p class="sub-sub-topic-heading">3.2.7 Profile Settings</p>
+							<p class="sub-sub-topic-heading">
+								Purpose: Allows teachers to manage their profile and account settings.</p>
+							<p class="sub-sub-topic-heading">
+								Components:
+							</p>
+							<ul>
+								<li class="sub-topic-content">"
+									Profile picture upload
+								</li>
+								<li class="sub-topic-content">
+									Change password
+								</li>
+								<li class="sub-topic-content">
+									Email settings
+								</li>
+								<li class="sub-topic-content">
+									Notification preferences
+								</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+				<!--  -->
+				<!--  -->
+				<div class="sub-topic" id="topic-3.3">
+					<p class="sub-topic-heading">3.3 Hardware Interfaces</p>
+					<p class="sub-topic-content">
+						The key hardware prerequisite for the system involves either a computer or a mobile phone
+						running the Android operating system. The system mandates microphone authorization for
+						micro-viva, camera accessibility for automated proctoring, and an active internet
+						connection.
+					</p>
+				</div>
+				<!--  -->
+				<!--  -->
+				<div class="sub-topic" id="topic-3.4">
+					<p class="sub-topic-heading">3.4 Software Interfaces</p>
+					<p class="sub-topic-content">
+						Working on it, searching APIs.
+					</p>
+				</div>
+				<!--  -->
+				<!--  -->
+				<div class="sub-topic" id="topic-3.5">
+					<p class="sub-topic-heading">3.5 Communications Interfaces</p>
+					<p class="sub-topic-content">
+						The system will employ a Restful API to establish a connection between the frontend/mobile
+						app and the backend server. Token authentication will be utilized to facilitate
+						communication between the frontend and backend via the API.
+					</p>
+				</div>
+				<!--  -->
+				</div>
+				<!-- End of Topic Template -->
+
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-4">
+					<p class="topic-heading">4. System Features</p>
+
+					<!--  -->
+					<div class="sub-topic" id="topic-4.1">
+						<p class="sub-topic-heading">4.1 Sign Up</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Sign up</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Faculty and Student</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Registering user to the system</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>Users initiate the registration process through the intuitive user
+											interface. Upon commencing registration, users are prompted to select their
+											designated role within the system, either as a Faculty member or a Student.
+											Based on the chosen role, individuals are presented with a tailored
+											registration form, wherein they provide essential details required to
+											establish a new account (such as name and password). A crucial requirement
+											for successful registration is the provision of a valid email address,
+											ensuring authenticity and communication. It's noteworthy that each email
+											account is associated with a singular system account, thereby preventing
+											duplicity. Once the registration process is successfully completed, the
+											system enforces a restriction against changing roles (e.g., transitioning
+											from Student to Faculty), ensuring role consistency throughout the user's
+											engagement with the platform.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Not Applicable.</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<p class="sub-sub-topic-heading">Typical Course of Events</p>
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>
+											1. This use case is initiated when the user opts to sign up for the system.
+										</td>
+										<td></td>
+
+									</tr>
+									<tr>
+										<td>2. Upon this decision, the user either clicks/touches the "Sign Up" button
+											within the user interface or accesses the registration URL.
+										</td>
+										<td>3. In response, the system navigates the user to a dedicated registration
+											page.</td>
+									</tr>
+									<tr>
+										<td>
+											4. The user is prompted to select their role within the system, choosing
+											either 'Faculty' or 'Student.'
+										</td>
+										<td>
+											5. Subsequently, the system presents the user with an appropriate form to
+											complete the registration process.
+										</td>
+									</tr>
+									<tr>
+										<td>
+											6. The user conscientiously completes the registration form, culminating in
+											the action of clicking the "Register" button.
+										</td>
+										<td>
+											7. With the user's input processed, the system securely generates an account
+											within the database and seamlessly redirects the user to their personalized
+											dashboard, thereby providing instant access to the system's features.
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.2">
+						<p class="sub-topic-heading">4.2 Login</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>User login</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Faculty and Student</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>To verify user credentials and establish secure entry into the system.</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>The user's intention is to access the software by utilizing the user
+											interface. To achieve this, the user inputs their email address and password
+											for authentication purposes, followed by clicking the login button. Upon
+											successful verification, the user is seamlessly directed to their
+											personalized dashboard.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>1. This use case commences with the user's decision to initiate a login into
+											the system. The user accesses the login URL.</td>
+										<td>2. In response, the system directs the user to a dedicated login form.</td>
+									</tr>
+									<tr>
+										<td>3. The user inputs their email credentials and proceeds by clicking the
+											login button.</td>
+										<td>4. Upon successfully validating the provided credentials, the system
+											redirects the user to their intended dashboard. Additionally, the system
+											determines whether the user is a student or faculty member and generates an
+											authentication token for the user's secure access.</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.3">
+						<p class="sub-topic-heading">4.3 Create Cohort</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Create Exam-Cohort</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Faculty</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Faculty members to initiate the creation of exam cohorts upon logging into
+											the software.</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>Following successful authentication, Faculty members can proceed to craft an
+											exam cohort directly from their dashboard. By selecting the "Create Cohort"
+											option, the system prompts the faculty to complete a form tailored for this
+											purpose. After filling out the required information, the user submits the
+											form. Subsequently, the system undertakes the processing and validation of
+											the form data, ultimately generating a new exam cohort.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1, 4.2</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>1. This use case commences when a faculty member opts to initiate the
+											creation of an exam cohort from their dashboard.</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>2. The faculty member selects the "Create Cohort" button.</td>
+
+										<td>3. In response, the system displays a form or dialogue on the user
+											interface, prompting the faculty member to input the requisite details for
+											the new exam cohort.</td>
+									</tr>
+									<tr>
+										<td>
+											4. he faculty member diligently completes the necessary details of the exam
+											cohort within the presented form and subsequently submits it.
+										</td>
+										<td>
+											5. Upon submission, the system processes the information and generates a
+											fresh entry for the exam cohort within the database. The faculty member
+											initiating this use case is automatically designated as the evaluator of the
+											newly created exam cohort.
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>
+											6. The system conveys a message of success to the user interface, indicating
+											"New exam-cohort successfully created!" Additionally, the system visually
+											includes the newly formed exam cohort within the dashboard, where it is
+											presented alongside other existing cohorts.
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.4">
+						<p class="sub-topic-heading">4.4 Add Students in Cohort</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Adding student into a cohort</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Faculty</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Faculty members add students into cohorts</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>Once a faculty member has been successfully authenticated and established
+											their exam group, they can easily include students in this group by
+											inputting their email addresses into a form and then selecting the 'Add
+											student' button.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1, 4.2, 4.3</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>1. This scenario commences when a faculty member opts to include student(s)
+											in their cohort via the cohort's panel.</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>2. The faculty member selects the "Add Student" button located within the
+											cohort's panel.</td>
+										<td>3. The system then displays a dialogue form, presenting an input field for
+											the email address.</td>
+									</tr>
+									<tr>
+										<td>
+											4. The faculty enters the email address into the input field and proceeds to
+											click the "Add" button.
+										</td>
+										<td>
+											5. The system adds the user with the provided email address as a student to
+											the cohort, and a message reading "Student successfully added" is displayed
+											in the user interface.
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.5">
+						<p class="sub-topic-heading">4.5 Create Examination</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Create Examination</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Faculty</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Faculty of cohorts creates an examination into their cohort.</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>After the faculty member has been authenticated and successfully created
+											their examination cohort, they have the ability to generate exams within
+											these cohorts. When initiating a new examination, the faculty member will
+											specify the available date and time for the exam, its duration, and define
+											individual questions. Each cohort encompasses multiple-choice questions
+											(MCQs), written questions, and micro-vivas. The faculty member can include
+											any number of MCQs, written questions, and micro-vivas in an assessment.
+											When adding an MCQ, the faculty member will input the question statement
+											text, provide all the answer options with corresponding text, select the
+											correct answers, and assign marks to the question. When incorporating a
+											written question, the faculty member will formulate the question and provide
+											the answer. For micro-vivas, the faculty member will add the question
+											statement as a voice recording, along with the correct answer as a voice
+											recording.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1, 4.2, 4.3</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>1. This scenario unfolds when a faculty member intends to establish an
+											examination for a cohort.</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>2. The faculty member initiates the process by selecting the "Create a New
+											Exam" button within the cohort panel.</td>
+										<td>3. The system responds by presenting a form to the faculty.</td>
+									</tr>
+									<tr>
+										<td>
+											4. The faculty member proceeds to complete the form, supplying the available
+											date and time, specifying the duration, and providing detailed information
+											for each question.
+										</td>
+										<td>
+											5. Following this, the system incorporates a new assessment into the cohort
+											and displays a message in the user interface, confirming the successful
+											addition of the assessment. Additionally, notifications are dispatched to
+											the students within that cohort.
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.6">
+						<p class="sub-topic-heading">4.6 Attending Examination</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Attending Examination</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Student</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Students who are candidate of cohort will attend examination.</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>Upon successfully logging into the system, students can participate in an
+											examination within the specified time window determined by the faculty. They
+											are required to complete the examination within a fixed duration after
+											commencing. Throughout the examination, students must ensure they are in a
+											well-lit environment to maintain clear visibility of their faces. Students
+											must grant permission for camera and microphone access to take the
+											examination, and they are not permitted to switch browser tabs or switch to
+											other application screens during the examination.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1, 4.2, 4.5</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td> 1. The use case begins when a student intends to take an examination.</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>
+											2. The student initiates the examination by clicking the "Start Now" button
+											within a specific cohort.</td>
+										<td>
+											3. The system prompts the user to an examination window.</td>
+									</tr>
+									<tr>
+										<td>
+											4. Students will answer multiple-choice questions (MCQs) by selecting
+											checkboxes, type their answers for written questions, and record their
+											voices for micro viva questions. After completing the examination, the
+											student will click the "Submit Answers" button.
+										</td>
+										<td>
+											5. The system will save the answers and prompt the student to return to the
+											cohort's home page.
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.7">
+						<p class="sub-topic-heading">4.7 Re-Evaluate Examination</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Re-Evaluate Examination</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Faculty</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Faculty of a cohort can evaluate the answers of the students manually.</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>When a student has participated in an examination, the system automatically
+											grades their performance. However, if the faculty believes there may have
+											been an issue with the provided answers or some student creates dispute,
+											they have the option to manually adjust the grades for all students in the
+											cohort. Additionally, the faculty can access and review the responses,
+											including scripts or recordings, of any student within the examination
+											cohort.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1, 4.2, 4.3, 4.5, 4.6, 4.10, 4.12</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>1. This use case is initiated either when faculty members wish to adjust a
+											student's grade, review their answer script, or when a student raises a
+											dispute.
+
+										</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>
+											2. The faculty member begins by clicking the "Check Response" button located
+											in the assessments panel.</td>
+										<td>
+											3. The system then displays a list of students along with their respective
+											marks, accompanied by an "Adjust Mark" button.</td>
+									</tr>
+									<tr>
+										<td>
+											4. If the faculty member intends to review the answer script of a particular
+											student, they simply click or tap on that student's name.
+										</td>
+										<td>
+											5. The system will then present the answer script of the selected student,
+											which will not be randomized, and include playback buttons for the micro
+											viva question and answer and percentage of match with provided answers.
+										</td>
+									</tr>
+									<tr>
+										<td>
+											6. Should the faculty member wish to modify any provided answer, they can do
+											so by clicking the "Adjust Mark" button.
+										</td>
+										<td>
+											7. The system will subsequently show a list of questions along with their
+											corresponding answers, as provided by the faculty member.
+										</td>
+									</tr>
+									<tr>
+										<td>
+											8. The faculty member can make the necessary adjustments to the answers and
+											then save their changes.
+										</td>
+										<td>
+											9. Following this, the system will update the marks for all students based
+											on the revised answers and display a message indicating "Updated Marks.
+										</td>
+
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.8">
+						<p class="sub-topic-heading">4.8 Publish Score</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Publish score</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Faculty</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Publishing scores of an examination after the examination ends</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>After and examination is over faculty will publish scores and students will
+											receive a notification.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1, 4.2, 4.3, 4.5, 4.6, 4.10, 4.12</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>
+											1. This use case commences when faculty members wish to publish the scores
+											of an examination.
+										</td>
+
+									</tr>
+									<tr>
+										<td>
+											2. The faculty member clicks on the "Publish Scores" option within the
+											examination panel.
+										</td>
+										<td>
+											3. The system displays a message stating "Score published" and marks the
+											examination as "Published Score."
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>
+											4. The system sends a notification to each student in the cohort for that
+											specific examination.
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.9">
+						<p class="sub-topic-heading">4.9 View Exam Summery</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>View Exam Summery</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Faculty</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Faculy can see the whole exam timeline as summery</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>After an examination is over, the system creates a summery of that
+											examination. Faculty can see that summer that involves each students
+											actitivy</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1, 4.2, 4.3, 4.5, 4.6, 4.0, 4.11</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>1. This use case commences when faculty members wish to view the summery of
+											an examination.</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>2. Faculty clicks a button "View Summery" in a examination panel inside
+											their cohort.</td>
+										<td>3. In response the system shows a list of students name who attended the
+											exam</td>
+									</tr>
+									<tr>
+										<td>
+											4. Faculty clicks on a students name to view a specific student's activity
+											during the exam.
+										</td>
+										<td>
+											5. System show the faculty a graph representation of various activity of the
+											student during the exam.
+
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.10">
+						<p class="sub-topic-heading">4.10 Create Dispute</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Create dispute</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>Studnet</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Studends making dispute for a examination score.</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>After the scores of an examination have been published, a student has the
+											option to initiate a dispute for a specific examination. The student will
+											articulate their concerns, specifying the question number related to the
+											dispute. Upon creating the dispute, a faculty member will undertake a
+											re-evaluation of the student's answers.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Functions: Section 4.1, 4.2, 4.6, 4.8</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>
+											1. This use case begins when a student desires to file a dispute for a
+											specific examination.</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>
+											2. The student initiates the process by clicking the "Create Dispute" button
+											within the examination panel.
+										</td>
+										<td>
+											3.The system presents a form for the student to complete when creating a
+											dispute.
+										</td>
+									</tr>
+									<tr>
+										<td>
+											4. The student, while creating the dispute, will document the issue and
+											optionally include question numbers, then proceed to click the "Submit"
+											button.
+										</td>
+										<td>
+											5. The system generates the dispute and sends a notification to the faculty
+											responsible for that examination.
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.11">
+						<p class="sub-topic-heading">4.11 Auto-Proctoring</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Automatic Proctoring</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>System</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Making the proctorig process automatic</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>When a student commences an examination, the 'auto-proctoring' system
+											activates to monitor the student's activity throughout the test. It verifies
+											the student's identity by recognizing their face, ensuring the correct
+											individual is taking the examination. Additionally, it prevents the student
+											from switching browser tabs until they complete the examination. In the
+											event of any suspicious activity, the system logs the details into the
+											examination summary.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Not applicable</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>
+											1. This use case is initiated when a student begins taking an examination.
+										</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>
+											2. The student clicks the "Start Exam" button.
+										</td>
+										<td>
+											3. The system gains access to the student's device, including the camera and
+											microphone, and begins analyzing the student's behavior during the
+											examination. It also logs this activity into the examination summary.
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.12">
+						<p class="sub-topic-heading">4.12 Auto-Marking</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Automatic marking</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>System</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Marking answers of student after the exam ends.</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>When a student submits their answers, the system automatically evaluates the
+											responses and assigns scores. Multiple-choice questions (MCQs) are assessed
+											based on exact matches with the correct answers. For written questions and
+											short vivas, the evaluation is conducted partially by comparing the
+											similarity of the responses with the actual answers using a large language
+											model (LLM).</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Not applicable</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>
+											1. This use case is initiated when a studentfinishes an examination.
+										</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>
+											2. Student clickes "Submit answers" button in the user interface</td>
+										<td>
+											3. The system marks the answers according to the actual answers provided by
+											the faculty.
+
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.13">
+						<p class="sub-topic-heading">4.13 Maintain Schedule</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Maintain Schedule</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>System</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Maintaing flexible examination window and tight duration</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>When faculty members create an examination, they specify both the available
+											date and time (T) for the examination and its duration (D). This means that
+											students can attend the examination anytime between T and will have no more
+											than D time to complete the examination.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Not applicable</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>1. 1.The use case begins when a faculty creates a new examination.
+										</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>2. Faculty clicks/taps “Create Exam” button.</td>
+										<td>3. System starts maintaining the schedule for the exam.</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.14">
+						<p class="sub-topic-heading">4.14 Create Exam Summery</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Create Exam Summery</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>System</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Creating summery of each student's activity during attending an examiantion
+										</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>A summary of an examination is generated upon the creation of a new exam.
+											When a student begins taking an exam, the system monitors their activity and
+											logs it. After the student's exam concludes, the system compiles a timeline
+											of their activity and incorporates it into the examination summary. This
+											allows faculty members to review any student's activity during the exam.
+										</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Not applicable</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>
+											1. This use case initiates when a faculty member creates a new examination.
+										</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>
+											2. The faculty member then clicks or taps on the "Create Examination"
+											button.
+										</td>
+										<td>3. The system generates an examination summary.</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>
+											When a student takes the exam and engages in suspicious activity, the system
+											logs this information in the summary by creating a timeline for each
+											student.
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-4.15">
+						<p class="sub-topic-heading">4.15 Send Login Invitation</p>
+						<div class="sub-sub-topic">
+							<div class="use-case-table">
+								<table>
+									<tr>
+										<td>Use Case</td>
+										<td>Send Login Invitation</td>
+									</tr>
+									<tr>
+										<td>Actors</td>
+										<td>System</td>
+									</tr>
+									<tr>
+										<td>Purpose</td>
+										<td>Sending invitation to a non registered user</td>
+									</tr>
+									<tr>
+										<td>Overview</td>
+										<td>
+											When adding students, faculty members will input their email addresses. If
+											the system does not identify the email as registered in the system, an
+											invitation email will be dispatched to that email address, containing a
+											registration link. Upon registration, the student will be automatically
+											added to the cohort and will have access to view their cohorts and exams on
+											their dashboard.</td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>Primary</td>
+									</tr>
+									<tr>
+										<td>Cross References</td>
+										<td>Not applicable</td>
+									</tr>
+								</table>
+							</div>
+
+							<!--  -->
+							<div class="event-table">
+								<table>
+									<tr>
+										<th>Actor Action</th>
+										<th>System Response</th>
+									</tr>
+									<tr>
+										<td>
+											1. This use case commences when a faculty member attempts to add a student
+											who is not yet registered in the system.
+										</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>2. The faculty member then clicks or taps on the "Add Student" button.</td>
+										<td>
+											3. In cases where the system cannot find the student registered in the
+											database, it generates a registration link and sends an invitation email to
+											the provided email address.
+										</td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+						<div class="sub-sub-topic">
+							<p class="sub-sub-topic-heading">Alternative Courses</p>
+							<p class="sub-topic-content">
+								content
+							</p>
+						</div>
+					</div>
+					<!--  -->
+
+
+
+				</div>
+				<!-- End of Topic Template -->
+
+
+
+
+
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-5">
+					<p class="topic-heading">5. Other Nonfunctional Requirements</p>
+					<!--  -->
+					<div class="sub-topic" id="topic-5.1">
+						<p class="sub-topic-heading">5.1 Performance Requirements</p>
+						<p class="sub-topic-content">
+							The system is required to possess the ability to access voice recording, camera, and the
+							internet for seamless communication with the backend server. It's imperative that every
+							action and corresponding response occurs within a brief time frame, with minimal delays
+							lasting only a few seconds.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-5.2">
+						<p class="sub-topic-heading">5.2 Safety Requirements</p>
+						<p class="sub-topic-content">
+							The system should strictly restrict access to resources within an exam cohort to only
+							faculty and student users. Additionally, only the creator of the exam cohort should have the
+							authority to add or access exams, as well as implement modifications within the cohort.
+							Exclusive access to viewing answer scripts within the exam cohort should be granted solely
+							to the creator of the respective examination.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-5.3">
+						<p class="sub-topic-heading">5.3 Security Requirements</p>
+						<p class="sub-topic-content">
+							The system will employ a secure backend for database access. While users can review
+							essential information, they will be restricted from altering any data except for the
+							authorized content specific to them. Every user is required to log in using a valid email
+							address. The authentication process will rely on a token-based authentication.
+						</p>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-5.4">
+						<p class="sub-topic-heading">5.4 Software Quality Attributes</p>
+						<div class="sub-sub-topic">
+							<p class="sub-topic-content">
+
+								<strong>Availability:</strong> The system will be accessible at all times, allowing
+								users to connect through a web browser or mobile app. The only constraint on
+								accessibility arises from potential server downtime.
+								<br><br>
+
+								<strong>Portability:</strong> The user-end component offers complete portability,
+								ensuring compatibility with any system employing a web browser to access our system's
+								functionalities. While the web app is compatible with various web browsers, a larger
+								display is recommended for an optimal experience. The mobile application is designed to
+								function on the latest Android versions, with a preference for Android 8.0 or higher.
+								<br><br>
+
+								<strong>Security:</strong> The system will ensure that all data is stored with an
+								adequate level of security.
+								<br><br>
+
+								<strong>Usability:</strong> The system is designed for straightforward navigation and
+								minimal delay, making it user-friendly. Individuals with limited experience in utilizing
+								web applications can easily engage with this product.
+								<br><br>
+
+								<strong>Installability:</strong> The installation process for the system on a mobile
+								device is simple. For computers, a web browser is sufficient to access the system.
+								<br><br>
+
+								<strong>Robustness:</strong> The system has the capability to resume an ongoing
+								examination in the event of a device failure. Users can switch to a different device to
+								continue the exam without losing any of the previously provided answers.
+								<br><br>
+
+								<strong>Accessibility:</strong> The system is accessible to all user types, including
+								individuals with visual impairments. The micro-viva feature can be utilized to cater to
+								their needs.
+								<br><br>
+
+								<strong>Authentication:</strong> The system will ensure that user interaction is carried
+								out by valid users through the implementation of contemporary authentication mechanisms.
+								<br><br>
+
+								<strong>Authorization:</strong> The system will guarantee that only authorized users
+								have access to the corresponding data.
+							</p>
+						</div>
+					</div>
+					<!--  -->
+					<!--  -->
+					<div class="sub-topic" id="topic-5.5">
+						<p class="sub-topic-heading">5.5 Business Rules</p>
+						<p class="sub-topic-content">
+							The system necessitates users to possess a valid email account for software usage. Moreover,
+							faculties retain the capability to establish exam cohorts and enroll students into these
+							cohorts to facilitate examination participation.
+						</p>
+					</div>
+					<!--  -->
+				</div>
+				<!-- End of Topic Template -->
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-6">
+					<p class="topic-heading">6. Other Requirements</p>
+					<div class="sub-topic">
+						<p class="sub-topic-content">Not Applicable.</p>
+					</div>
+
+				</div>
+				<!-- End of Topic Template -->
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-7">
+					<p class="topic-heading">Appendix A: Glossary</p>
+					<div class="sub-topic">
+						<p class="sub-topic-content">
+							<strong>User Categories:</strong> The system recognizes two distinct types of users: faculty
+							and student.
+							<br><br>
+
+							<strong>Faculty:</strong> A "User" possessing the authority to establish an exam cohort
+							(further elaborated in this section) and exert control over specific details associated with
+							it.
+							<br><br>
+							<strong>Student:</strong> A "User" equipped with the privilege to participate in an exam
+							within the cohort (explained further in this section) to which they have been added by an
+							evaluator.
+							<br><br>
+							<strong>Cohort:</strong>: This denotes a collection or grouping of examinations. An exam
+							cohort can encompass any number of exams, ranging from none to as many as required.
+							<br><br>
+							<strong>MCQ:</strong>: This designates a particular type of assessment question
+							characterized by a question statement accompanied by multiple options. An MCQ may have one
+							or more correct answers.
+							<br><br>
+							<strong>Short-Text:</strong>: This pertains to a question type wherein students are required
+							to input their response via text.
+							<br><br>
+							<strong>Micro-Viva:</strong> This refers to an assessment question format wherein the prompt
+							is delivered through a voice recording, and candidates are expected to furnish their answers
+							likewise, in the form of voice recordings.
+						</p>
+					</div>
+				</div>
+				<!-- End of Topic Template -->
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-8">
+					<p class="topic-heading">Appendix B: Analysis Models</p>
+					<div class="sub-topic">
+						<p class="sub-topic-content">Not Applicable.</p>
+					</div>
+				</div>
+				<!-- End of Topic Template -->
+
+				<!-- Topic Template -->
+				<div class="topic" id="topic-9">
+					<p class="topic-heading">Appendix C: To Be Determined List</p>
+					<div class="sub-topic">
+						<p class="sub-topic-content">Not Applicable.</p>
+					</div>
+				</div>
+				<!-- End of Topic Template -->
+	</section>
+	<!-- End Of  Content -->
+	<script src="JS/script.js" type="text/javascript"> </script>
+</body>
+
+</html>

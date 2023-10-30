@@ -51,13 +51,17 @@ router.get('/:cohortId', async (req, res) => {
     }
 
     const cohort = await Cohort.findById(cohortId).populate('exams').exec();
-
+    const faculty = await User.findOne({email: cohort.faculty});
+    if(!cohort || !faculty){
+      return res.status(300).json({success: false, message:"Something went wrong"});
+    }
     let returnCohort = {
       _id: cohort._id,
       title: cohort.title,
       color: cohort.color,
       description: cohort.description,
-      faculty: cohort.faculty 
+      faculty: cohort.faculty,
+      faculty_name: faculty.name
     }
     let exams = {};
     cohort.exams.forEach(val => {
@@ -68,15 +72,15 @@ router.get('/:cohortId', async (req, res) => {
           color: val.color,
           startTime: val.startTime,
           endTime: val.endTime,
-          duration: val.duration
+          duration: val.duration,
+          publised: val.published,
+          graded: val.graded
         };
     });
-    returnCohort.exams = exams;
-    
-    if(req.user.role === 'faculty'){
-      returnCohort.students = cohort.students
-    }
 
+    returnCohort.exams = exams;
+    returnCohort.students = cohort.students
+  
     return res.status(201).json(returnCohort);
 });
 

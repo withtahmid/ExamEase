@@ -27,18 +27,20 @@ const questionSchema = new mongoose.Schema({
         required: true
     },
 
-    // optional for written
+    // optional for written and viva
     description: String,
-    
     textAnswer: String, 
    
     // optional for mcq
     mcqOptions:[{type: String}],
     mcqAnswer:String,
    
-    // optional for viva
-    audioQuestion: String,
-    audioAnswer:String
+    // // optional for viva
+    // vivaQuestionVoice: String,
+    // vivaQuestionText:String,
+
+    // vivaAnswerVoice:String,
+    // vivaAnswerText:String
 });
 
 module.exports = mongoose.model('Question', questionSchema);

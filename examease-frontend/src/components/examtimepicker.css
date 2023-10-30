@@ -1,0 +1,15 @@
+.App {
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.myDatePicker fieldset.MuiOutlinedInput-notchedOutline {
+    border-color: #D1D5DB;
+    border-radius: 5px;
+}
+
+.myDatePicker .Mui-focused fieldset.MuiOutlinedInput-notchedOutline {
+    border-color: #4F46E5;
+    border-radius: 5px;
+}
+

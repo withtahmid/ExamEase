@@ -46,47 +46,39 @@ router.post('/', async (req, res) => {
   });
   
   router.post('/:cohortId', async (req, res) => {
+    const cohortId = req.params.cohortId;
     if(req.user.role !== 'faculty'){
       response = {
         success : false,
-        message : "Only a faculy can modify a cohort"
+        message : "Only a faculy can create a cohort"
       }
       return res.status(300).json(response);
     }
-    const {cohortName} = req.body;
-    const cohortId = req.params.cohortId;
-    if(!cohortName){
-      response = {
-        success : false,
-        message : "Cohort name required"
-      }
-      return res.status(300).json(response);
+    const cohort = {
+      title: req.body.cohortName,
+      description: req.body.description,
+      color: req.body.color,
+      faculty: req.user.email
     }
-    if(cohortName.length < 5 || cohortName.length > 50 || RTCSessionDescription.length > 20){
+    
+    if(!verifier.verifyCohortCreateInfo(cohort)){
       response = {
         success : false,
-        message : "Incorrect cohort name or descriptioon format"
-      }
-      return res.status(300).json(response);
-    }
-
-    const cohort = await Cohort.findById(cohortId);
-
-    if(!cohort){
-      response = {
-        success : false,
-        message : "Incorrect cohort id "
+        message : "Invalid fields"
       }
       return res.status(300).json(response);
     }
 
     try{
-      cohort.title = cohortName;
-      await cohort.save();
-      return res.status(201).json({success: true, message :"successfully updated cohort"})
+      const updated_cohort = await Cohort.findByIdAndUpdate(cohortId, cohort, { new: true });
+      res.status(201).json({
+        success: true,
+        message: "Cohort Successfully Created",
+        cohort: updated_cohort
+      });
     }
     catch(e){
-      return res.status(500).json({error: e});
+      res.status(500).json({error: e});
     }
   });
 

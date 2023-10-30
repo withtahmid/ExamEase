@@ -48,6 +48,7 @@ router.post('/', async (req, res) => {
         let added =  0;
         let invited=  0
         const promises = students.map(async (email) => {
+           
             if (!cohort.students.includes(email)) {
                 
                 cohort.students.push(email);

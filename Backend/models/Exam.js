@@ -38,6 +38,11 @@ const examSchema = new mongoose.Schema({
     required: true
   },
 
+  graded:{
+    type: Boolean,
+    required: true
+  },
+  
   questions: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -59,6 +64,13 @@ const examSchema = new mongoose.Schema({
         type: Number,
         required: true
       }
+    }
+  ],
+
+  disputes:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Dispute'
     }
   ],
 

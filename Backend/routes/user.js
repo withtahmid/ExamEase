@@ -18,7 +18,14 @@ router.get('/', async (req, res) => {
     }
     let cohorts = {};
     result.cohorts.forEach(v => {
-      cohorts[v._id.toString()] = v.title;
+      cohorts[v._id.toString()] = {
+        _id: v._id.toString(),
+        title: v.title,
+        description: v.description,
+        color: v.color,
+        faculty: v.faculty,
+        num_students: v.students.length
+      };
     });
 
     const user = {

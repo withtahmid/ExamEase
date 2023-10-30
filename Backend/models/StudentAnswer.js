@@ -17,16 +17,24 @@ const StudentAnswer = new mongoose.Schema({
     allAnswer:[{
             question: {
                 type:mongoose.Schema.Types.ObjectId,
+                ref:'Question',
                 required: true
             },
-            textAnswer: String,
-            audioAnswer: String,
-            mcqAnswer: String
+            obtainedScore: Number,
+            answer: String,
+            audio: String
         }
     ],
+    attended:{
+        type:Boolean,
+        required: true
+    },
     submitted:{
         type:Boolean,
         required: true
+    },
+    totalScore: {
+        type:Number
     }
 });
 

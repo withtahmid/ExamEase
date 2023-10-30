@@ -61,13 +61,14 @@ function isValidDateFormat(dateString) {
 
 
 function verifyExamCreationInfo(exam){
+    console.log(exam)
     if( !exam.title || 
         !exam.startTime ||
         !exam.endTime ||
         !exam.duration ||
         !exam.description
         ){
-            
+            console.log("here")
             return false;
         }
         if(
@@ -103,7 +104,6 @@ function verifyQuestionFormat(question){
     }
     if(question.type === 'mcq'){
         if((!question.mcqOptions || !question.mcqAnswer)){
-            console.log("here")
             return false;
         }else if((question.mcqOptions.length < 2 && question.mcqOptions.length > 6) || question.mcqOptions.length !== question.mcqAnswer.length){
             return false;
@@ -123,21 +123,24 @@ function verifyQuestionFormat(question){
     }
 
     if(question.type === 'written'){
-        if(!question.textAnswer){
+        if(!question.textAnswer || !question.title){
             return false;
         }
-        if(question.textAnswer.length < 1 || question.textAnswer.length > 100){
+        if(question.textAnswer.length < 1 || question.textAnswer.length > 200){
             return false;
         }
         return true;
     }
 
     if(question.type === 'viva'){
-        if(!question.audioQuestion || !question.textAnswer){
-
+        if(!question.textAnswer || !question.title){
+            return false;
         }
+        if(question.textAnswer.length < 1 || question.textAnswer.length > 200){
+            return false;
+        }
+        return true;
     }
-
     return false;
 }
 

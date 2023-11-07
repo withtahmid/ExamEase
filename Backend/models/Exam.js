@@ -73,11 +73,21 @@ const examSchema = new mongoose.Schema({
       ref: 'Dispute'
     }
   ],
-
-  allActivityTimeline:[
+  studentActivities:[
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'ActivityTimeline'
+      student:{
+        type:String,
+        required: true
+      },
+      time:{
+        type: Date,
+        required: true
+      },
+      report:{
+        type: String,
+        required: true
+      },
+      image:String
     }
   ]
 });

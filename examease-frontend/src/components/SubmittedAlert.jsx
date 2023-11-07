@@ -11,7 +11,7 @@ export default function SubmittedAlert() {
                 <div className="ml-3">
                     <h3 className="text-sm font-medium text-green-800">Successfully submitted</h3>
                     <div className="mt-2 text-sm text-green-700">
-                        <p>Your exam is submitted successfully. Scores will be sent to your email soon.</p>
+                        <p>Your exam is submitted successfully. Scores will be sent to your email once they're published.</p>
                     </div>
 
                 </div>

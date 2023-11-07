@@ -10,7 +10,7 @@ const navigation = [
     { name: 'Dashboard', href: '/', current: true },
     { name: 'Team', href: '#', current: false },
     { name: 'Cohorts', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+    { name: 'Disputes', href: '/disputes', current: false },
 ]
 const userNavigation = [
     { name: 'Your Profile', href: '#' },

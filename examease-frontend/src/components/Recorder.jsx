@@ -16,7 +16,9 @@ export default function Recorder({ getter }) {
     const addAudioElement = async (blob) => {
         const url = URL.createObjectURL(blob);
         // console.log(url);
-        const base64 = await blobToBase64(blob);
+        let base64 = await blobToBase64(blob);
+        // base64 = base64.substr(base64.indexOf(',') + 1);
+        // console.log(base64)
         // console.log(base64)
         getter(base64);
         // const audio = document.createElement('audio');
@@ -46,6 +48,7 @@ export default function Recorder({ getter }) {
                     audioBitsPerSecond: 64000,
                 }}
                 showVisualizer={true}
+
             />
             <br />
         </div>

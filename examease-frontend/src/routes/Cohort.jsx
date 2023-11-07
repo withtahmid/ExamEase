@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import CreateExamModal from '../components/CreateExamModal';
 import AddUserModal from '../components/AddUserModal';
 import DeleteCohortModal from '../components/DeleteCohortModal';
+import Notification from '../components/Notification';
 
 const profile = {
     name: 'CSE 311.9',
@@ -96,6 +97,10 @@ export default function Cohort() {
     }
 
 
+    const [addStudentNotificationState, setAddStudentNotificationState] = useState(false);
+    const [addStudentNotificationBody, setAddStudentNotificationBody] = useState("");
+
+
 
     return (
         <div>
@@ -118,10 +123,13 @@ export default function Cohort() {
                                 {cohort.description ? <p className="text-gray-500">{cohort.description}</p> : <span className="text-gray-700 loading loading-dots loading-xs"></span>}
 
                             </div>
+
                             {role === "faculty" ? <div className="mt-10"><div className={`justify-stretch ${cohort.title ? "mt-0.5" : ""} flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4`}>
                                 <button
                                     type="button"
-                                    onClick={() => setNewUserState(true)}
+                                    onClick={() => {
+                                        setNewUserState(true);
+                                    }}
                                     className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                                 >
                                     <PlusCircleIcon className="-ml-1 mr-2 h-5 w-5 text-gray-700" aria-hidden="true" />
@@ -168,9 +176,21 @@ export default function Cohort() {
             </div>
             <ExamList cohort={cohort} role={role} />
 
+            <Notification
+                heading={"Sucessfully done!"}
+                body={addStudentNotificationBody}
+                state={addStudentNotificationState}
+                getter={() => setAddStudentNotificationState(false)}
+            />
+
             <AddUserModal
                 state={newUserState}
-                onSubmit={() => setNewUserState(false)}
+                onSubmit={(message) => {
+                    setAddStudentNotificationBody(`${message.added} student(s) added, ${message.invited} invited.`);
+                    setNewUserState(false);
+                    setAddStudentNotificationState(true);
+                }
+                }
                 onCancel={() => {
                     setNewUserState(false);
                     // console.log("Canceled");

@@ -60,40 +60,82 @@ function isValidDateFormat(dateString) {
 
 
 
-function verifyExamCreationInfo(exam){
-    console.log(exam)
-    if( !exam.title || 
+  function verifyExamCreationInfo(exam) {
+    // console.log(exam)
+    if (!exam.title ||
         !exam.startTime ||
         !exam.endTime ||
         !exam.duration ||
         !exam.description
-        ){
-            console.log("here")
-            return false;
-        }
-        if(
-            exam.title.length < 5 || exam.title.length > 30 || exam.description.length > 200 ||
-            !isValidDateFormat(exam.startTime) || !isValidDateFormat(exam.endTime) || exam.duration < 10 || exam.duration > 180
-        ){
-            
-            return false;
-        }
-        const startTime = new Date(exam.startTime);
-        const endTime = new Date(exam.endTime);
-        const now = time.now();
-        if((now > startTime || startTime > endTime)){
-            
-            return false;
-        }
+    ) {
+        return {
+            status: false,
+            message: "Too few arguments"
+        };
+    }
 
-        const ms = endTime - startTime;
-        const minuteDiff = ms / (1000 * 60);
+    if (exam.title.length < 5 || exam.title.length > 30) {
+        return {
+            status: false,
+            message: "Exam title length must be between 5 and 30 characters"
+        };
+    }
+    if (exam.description.length > 200) {
+        return {
+            status: false,
+            message: "Exam description length must be less than 200 characters"
+        };
+    }
+    if (exam.duration < 10 || exam.duration > 180) {
+        return {
+            status: false,
+            message: "Exam duration must be between 10 and 180 minutes"
+        };
+    }
 
-        if(minuteDiff < exam.duration || minuteDiff > 10080){
-            return false;
-        }
-        return true;
+    if (
+        !isValidDateFormat(exam.startTime) || !isValidDateFormat(exam.endTime)
+    ) {
+
+        return {
+            status: false,
+            message: "Invalid date format"
+        };
+    }
+    const startTime = new Date(exam.startTime);
+    const endTime = new Date(exam.endTime);
+    const now = time.now();
+    // console.log("Now: " + now);
+    // console.log("ST: " + startTime);
+    // console.log("ET: " + endTime);
+    if (now > startTime) {
+        return {
+            status: false,
+            message: "Can't create past exams"
+        };
+    }
+    if (startTime > endTime) {
+        return {
+            status: false,
+            message: "Start time can't be before ending time"
+        };
+    }
+
+    const ms = endTime - startTime;
+    const minuteDiff = ms / (1000 * 60);
+
+    if (minuteDiff < exam.duration || minuteDiff > 10080) {
+        return {
+            status: false,
+            message: "Duration can't go past end time"
+        };
+    }
+    return {
+        status: true,
+        message: "Exam Created!"
+    };
 }
+
 
 function verifyQuestionFormat(question){
     if(!question){
@@ -133,10 +175,7 @@ function verifyQuestionFormat(question){
     }
 
     if(question.type === 'viva'){
-        if(!question.textAnswer || !question.title){
-            return false;
-        }
-        if(question.textAnswer.length < 1 || question.textAnswer.length > 200){
+        if(!question.title || !question.audioQuestion || !question.audioAnswer){
             return false;
         }
         return true;
@@ -203,5 +242,7 @@ module.exports = {
     verifyQuestionFormat,
     verifyExamStatus,
     timeClashesWithOtherExam,
-    verifyCohortCreateInfo
+    verifyCohortCreateInfo,
+    verifyNameFormat,
+    verifyPasswordFormat
 };

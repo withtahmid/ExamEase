@@ -42,6 +42,10 @@ app.use('/dispute', verifyToken, require('./routes/disputes'))
 app.use('/signup', require('./routes/signup'));
 app.use('/login', require('./routes/login'));
 
+app.use('/studentanswer',  verifyToken, require('./routes/studentpaper'));
+
+app.use('/reportactivity',  verifyToken, require('./routes/activity'));
+
 
 // DELETE
 app.use('/delete', verifyToken, require('./routes/delete'))

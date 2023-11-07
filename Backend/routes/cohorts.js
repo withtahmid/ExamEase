@@ -73,7 +73,7 @@ router.get('/:cohortId', async (req, res) => {
           startTime: val.startTime,
           endTime: val.endTime,
           duration: val.duration,
-          publised: val.published,
+          published: val.published,
           graded: val.graded
         };
     });

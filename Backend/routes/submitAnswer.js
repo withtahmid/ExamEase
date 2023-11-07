@@ -2,6 +2,7 @@ const express  = require('express');
 const router = express.Router();
 const verifier = require('../utils/verifier');
 const AI = require('../utils/AI');
+const time = require('../utils/time');
 const StudentAnswer = require('../models/StudentAnswer')
 const Cohort = require('../models/Cohort')
 const Exam = require('../models/Exam');
@@ -34,6 +35,18 @@ router.post('/', async (req, res) => {
             return res.status(201).json({success: false, message: "Something went wrong"});
         }
 
+        // restrictions -----------------------------------------
+
+        // if(exam.published){
+        //     return res.status(201).json({success: false, message: "This exam is published"});
+        // }
+        // const diff = (time.now() - (new Date(studentAnswer.startTime))) / 60000;
+        // if(diff > exam.duration){
+        //     return res.status(201).json({success: false, message: `Exam duration ${exam.duration} is over. cannot submit`});
+        // }
+
+        // restrictions -----------------------------------------
+
         for(let question in answers){
             if(!exam.questions.includes(new ObjectId(question))){
                 return res.status(300).json({success: false, message: `something wrong with question id "${question}"`});
@@ -47,25 +60,31 @@ router.post('/', async (req, res) => {
             });
 
             const qu = await Question.findById(question);
-
+            
             if(qu.type === 'viva'){
-                console.log("Hey I am here")
-                const audioToText = await AI.toText(answers[question]);
-                if(!audioToText.data.ok){
-                    continue;
+                try{
+                    const audioToText = await AI.toText(answers[question].slice(35));
+                    console.log(audioToText.data)
+                    if(!audioToText.data.ok){
+                        return res.status(500).json({success : false,message : audioToText.data});
+                    }
+                    if(existing){
+                        existing.answer = audioToText.data.text;
+                        existing.audio = answers[question];
+                    }
+                    else{
+                        studentAnswer.allAnswer.push({
+                            question: new ObjectId(question),
+                            audio: answers[question],
+                            answer: audioToText.data.text
+                        });
+                    }
+                }
+                catch(e){
+                    console.log(e)
+                    return res.status(500).json({success: false, message: "Failed to convert audio to text"});
                 }
                 
-                if(existing){
-                    existing.answer = audioToText.data.text;
-                    existing.audio = answers[question];
-                }
-                else{
-                    studentAnswer.allAnswer.push({
-                        question: new ObjectId(question),
-                        audio: answers[question],
-                        answer: audioToText.data.text
-                    });
-                }
             }
             else{
                 if(existing){
@@ -82,6 +101,7 @@ router.post('/', async (req, res) => {
 
         if(submit){
             studentAnswer.submitted = true;
+            studentAnswer.submitTime = time.now();
         }
         
         const result = await studentAnswer.save();

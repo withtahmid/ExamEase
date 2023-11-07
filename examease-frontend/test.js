@@ -1,1 +1,4 @@
-console.log(new Date().getTime())
+let x = new Date().toString()
+
+
+console.log(x)

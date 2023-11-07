@@ -35,12 +35,9 @@ const questionSchema = new mongoose.Schema({
     mcqOptions:[{type: String}],
     mcqAnswer:String,
    
-    // // optional for viva
-    // vivaQuestionVoice: String,
-    // vivaQuestionText:String,
-
-    // vivaAnswerVoice:String,
-    // vivaAnswerText:String
+    // optional for viva
+    audioQuestion: String,
+    audioAnswer: String
 });
 
 module.exports = mongoose.model('Question', questionSchema);

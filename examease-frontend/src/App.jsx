@@ -8,6 +8,10 @@ import SignUp from './routes/SignUp';
 import SignOut from './routes/SignOut';
 import Cohort from './routes/Cohort';
 import QuestionList from './components/QuestionList';
+import DisputeList from './components/DisputeList';
+import DisputeListHeading from './components/DisputeListHeading';
+import DisputeTabs from './components/DisputeTabs';
+import ManualGrade from './components/ManualGrade';
 
 
 
@@ -40,6 +44,14 @@ const router = createBrowserRouter([
   {
     path: "/questions",
     element: <QuestionList />
+  },
+  {
+    path: "/disputes",
+    element: <DisputeTabs />
+  },
+  {
+    path: "/dispute/view",
+    element: <ManualGrade />
   },
 ]);
 

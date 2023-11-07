@@ -9,6 +9,9 @@ const StudentAnswer = new mongoose.Schema({
         type: Date,
         required: true
     },
+    submitTime:{
+        type: Date
+    },
     exam:{
         type:mongoose.Schema.Types.ObjectId,
         required: true

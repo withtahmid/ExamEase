@@ -25,7 +25,7 @@ const people = [
     { id: 5, name: 'Theresa Webb' },
 ]
 
-export default function ListOptions({ title, options, defaultAnswer, correctAnswers, getter, graded, submitted }) {
+export default function ListOptions({ title, options, defaultAnswer, correctAnswers, getter, graded, disabled }) {
 
     const [answers, setAnswers] = useState("");
 
@@ -62,7 +62,7 @@ export default function ListOptions({ title, options, defaultAnswer, correctAnsw
                                 aria-describedby="comments-description"
                                 name={`option${idx}`}
                                 type="checkbox"
-                                onChange={() => submitted ? {} : toggleCheckbox(idx)}
+                                onChange={() => disabled ? {} : toggleCheckbox(idx)}
                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 checked={answers && answers.charAt(idx) === "1"}
                             />

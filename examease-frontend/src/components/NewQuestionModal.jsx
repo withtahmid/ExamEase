@@ -5,6 +5,9 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import { PlusIcon as PlusIconMini } from '@heroicons/react/20/solid'
 import { PlusIcon as PlusIconOutline } from '@heroicons/react/24/outline'
 
+
+
+
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Select from '../components/Select'
 import Recorder from './Recorder'
@@ -59,6 +62,10 @@ const getOptionsType = (mcqOptions, mcqAnswer) => {
 
 
 export default function NewQuestionModal(props) {
+
+    const [audioKey, setAudioKey] = useState(1);
+    const [recorderState, setRecorderState] = useState(false);
+
     const naviage = useNavigate();
     const token = localStorage.getItem('examease_token') || sessionStorage.getItem('examease_token');
 
@@ -69,7 +76,7 @@ export default function NewQuestionModal(props) {
 
     const [description, setDescription] = useState('');
     const [questionType, setquestionType] = useState('MCQ');
-    const [score, setScore] = useState(1);
+    const [score, setScore] = useState("1");
 
 
     const [counter, setCounter] = useState(3);
@@ -84,6 +91,11 @@ export default function NewQuestionModal(props) {
     // Text Only
     const [answer, setAnswer] = useState('');
 
+    // Voice Only
+    const [audioQuestion, setAudioQuestion] = useState('');
+    const [audioAnswer, setAudioAnswer] = useState('');
+
+
 
     useEffect(() => {
         if (props.callStack.now === "add" && props.callStack.prev !== "add") {
@@ -91,9 +103,11 @@ export default function NewQuestionModal(props) {
             setDescription('');
             setquestionType('MCQ');
             setAnswer('');
-            setScore(1);
+            setScore("1");
             setOptions(optionsType);
             setCounter(3);
+            setAudioQuestion("");
+            setAudioAnswer("");
         }
 
     }, [props.callStack])
@@ -102,11 +116,13 @@ export default function NewQuestionModal(props) {
     useEffect(() => {
         if (props.state) {
             console.log(props.state)
-            setTitle(props.state.type === "mcq" ? props.state.title : props.state.description);
+            setTitle(props.state.type !== "Written" ? props.state.title : props.state.description);
             setDescription(props.state.description);
             setquestionType(props.state.type === "mcq" ? "MCQ" : props.state.type === "viva" ? "Viva" : "Written");
             setAnswer(props.state.textAnswer);
             setScore(props.state.score);
+            setAudioQuestion("" || props.state.audioQuestion);
+            setAudioAnswer("" || props.state.audioAnswer);
 
             if (props.state.type === "mcq") {
                 setOptions(getOptionsType(props.state.mcqOptions, props.state.mcqAnswer));
@@ -212,12 +228,14 @@ export default function NewQuestionModal(props) {
                 targetCohortId: cohortId,
                 question: {
                     type: questionType.toLowerCase(),
-                    score: score,
-                    title: questionType.toLowerCase() === "mcq" ? title : description,
+                    score: score === "" ? 0 : Number(score),
+                    title: questionType !== "Written" ? title : description,
                     description: description,
                     mcqOptions: parseOptions().mcqOptions,
                     mcqAnswer: parseOptions().mcqAnswers,
-                    textAnswer: answer
+                    textAnswer: answer === "" ? "?" : answer,
+                    audioQuestion: audioQuestion,
+                    audioAnswer: audioAnswer
 
                 }
             })
@@ -228,12 +246,14 @@ export default function NewQuestionModal(props) {
             targetCohortId: cohortId,
             question: {
                 type: questionType.toLowerCase(),
-                score: score,
+                score: score === "" ? 0 : Number(score),
                 title: questionType.toLowerCase() === "mcq" ? title : description,
                 description: description,
                 mcqOptions: parseOptions().mcqOptions,
                 mcqAnswer: parseOptions().mcqAnswers,
-                textAnswer: answer
+                textAnswer: answer,
+                audioQuestion: "",
+                audioAnswer: ""
 
             }
         }))
@@ -249,9 +269,11 @@ export default function NewQuestionModal(props) {
         setDescription('');
         setquestionType('MCQ');
         setAnswer('');
-        setScore(1);
+        setScore("1");
         setOptions(optionsType);
         setCounter(3);
+        setAudioQuestion("");
+        setAudioAnswer("");
     }
     return (
         <Transition.Root show={props.modalState} as={Fragment}>
@@ -304,32 +326,6 @@ export default function NewQuestionModal(props) {
                                                 <p dangerouslySetInnerHTML={{ __html: getWhitespaces(200) }}></p>
 
                                                 <div className=" flex flex-col space-y-4">
-                                                    <div className="sm:col-span-2">
-                                                        <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
-                                                            Question statement
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <textarea
-                                                                value={description}
-                                                                onChange={(e) => { setDescription(e.target.value) }}
-                                                                id="description"
-                                                                name="description"
-                                                                rows={3}
-                                                                placeholder="e.g. What is the smallest prime number?"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                            // defaultValue={''}
-                                                            />
-                                                        </div>
-                                                        {/* <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p> */}
-                                                    </div>
-                                                    <div className="sm:col-span-3">
-                                                    </div>
-
-
-                                                    {/* <div>
-                                                        <h2>{options[0].id}</h2>
-                                                    </div> */}
-
                                                     <div className="col-span-full">
                                                         <Select
                                                             current={questionType == "MCQ" ? 1 : questionType == "Viva" ? 2 : 0}
@@ -350,26 +346,63 @@ export default function NewQuestionModal(props) {
                                                             />
                                                         </div> */}
                                                     </div>
+                                                    {questionType !== "Viva" ?
+                                                        <div className="sm:col-span-2">
+                                                            <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                                                                Question statement
+                                                            </label>
+                                                            <div className="mt-2">
+                                                                <textarea
+                                                                    value={description}
+                                                                    onChange={(e) => { setDescription(e.target.value) }}
+                                                                    id="description"
+                                                                    name="description"
+                                                                    rows={3}
+                                                                    placeholder="e.g. What is the smallest prime number?"
+                                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                // defaultValue={''}
+                                                                />
+                                                            </div>
+                                                            {/* <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p> */}
+                                                        </div>
+                                                        :
+                                                        <></>
+                                                    }
+
+                                                    <div className="sm:col-span-3">
+                                                    </div>
+
+
+                                                    {/* <div>
+                                                        <h2>{options[0].id}</h2>
+                                                    </div> */}
+                                                    {questionType !== "Written" ?
+                                                        <div className="mb-2 sm:col-span-2 sm:col-start-1">
+                                                            <label htmlFor="section" className="block text-sm font-medium leading-6 text-gray-900">
+                                                                Instruction(s)
+                                                            </label>
+                                                            <div className="mt-2">
+                                                                <input
+                                                                    value={title}
+                                                                    onChange={(e) => { setTitle(e.target.value) }}
+                                                                    type="text"
+                                                                    name="title"
+                                                                    id="title"
+                                                                    placeholder={`e.g. ${questionType === "Viva" ? "Listen to the audio and answer the question" : "Choose correct option(s)"}`}
+                                                                    autoComplete="address-level2"
+                                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        :
+                                                        <></>
+                                                    }
+
+
                                                     {questionType.toUpperCase() === 'MCQ' ?
                                                         <div>
 
-                                                            <div className="mb-2 sm:col-span-2 sm:col-start-1">
-                                                                <label htmlFor="section" className="block text-sm font-medium leading-6 text-gray-900">
-                                                                    Instruction(s)
-                                                                </label>
-                                                                <div className="mt-2">
-                                                                    <input
-                                                                        value={title}
-                                                                        onChange={(e) => { setTitle(e.target.value) }}
-                                                                        type="text"
-                                                                        name="title"
-                                                                        id="title"
-                                                                        placeholder="e.g. Choose the correct option"
-                                                                        autoComplete="address-level2"
-                                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                    />
-                                                                </div>
-                                                            </div>
+
                                                             {/* MCQ OPTIONS START */}
                                                             <label htmlFor="section" className="block text-sm font-medium leading-6 text-gray-900">
                                                                 Options
@@ -481,26 +514,77 @@ export default function NewQuestionModal(props) {
 
                                                             {/* MCQ OPTIONS END */}
                                                         </div>
-                                                        :
-                                                        <div className="sm:col-span-2">
-                                                            <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
-                                                                Answer
-                                                            </label>
-                                                            <div className="mt-2">
-                                                                <textarea
-                                                                    placeholder="e.g. 2 is the smallest (and only even) prime number"
-                                                                    value={answer}
-                                                                    onChange={(e) => { setAnswer(e.target.value) }}
-                                                                    id="answer"
-                                                                    name="answer"
-                                                                    rows={3}
-                                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                // defaultValue={''}
-                                                                />
+                                                        : questionType === "Written" ?
+                                                            <div className="sm:col-span-2">
+                                                                <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                                                                    Answer
+                                                                </label>
+                                                                <div className="mt-2">
+                                                                    <textarea
+                                                                        placeholder="e.g. 2 is the smallest (and only even) prime number"
+                                                                        value={answer}
+                                                                        onChange={(e) => { setAnswer(e.target.value) }}
+                                                                        id="answer"
+                                                                        name="answer"
+                                                                        rows={3}
+                                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                    // defaultValue={''}
+                                                                    />
+                                                                </div>
+                                                                {/* <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p> */}
                                                             </div>
-                                                            {/* <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p> */}
-                                                        </div>
+                                                            :
+                                                            <div>
+                                                                <div>
+                                                                    <p className="block text-sm font-medium leading-6 text-gray-900">Question statement</p>
+                                                                    <div className="flex flex-row space-x-24 mt-2">
+                                                                        <div onClick={() => setRecorderState(prev => prev ^ true)}>
+                                                                            <div> <p className="text-sm text-gray-700">{audioQuestion === "" ? "Record audio" : "Retake"}</p> </div>
+                                                                            <div className=""> <Recorder getter={(b64) => {
+                                                                                setAudioQuestion(b64);
+                                                                                setAudioKey(prev => prev + 1);
+                                                                            }} /> </div>
+                                                                        </div>
 
+                                                                        {audioQuestion !== "" && !recorderState ?
+                                                                            <div>
+                                                                                <p className="text-sm text-gray-700">Listen</p>
+                                                                                <audio key={audioKey} style={{ height: "40px" }} controls="controls" autobuffer="autobuffer">
+                                                                                    <source src={audioQuestion} />
+                                                                                </audio>
+                                                                            </div>
+                                                                            :
+                                                                            <></>
+                                                                        }
+                                                                        {/* <p>{audioQuestion}</p> */}
+                                                                    </div>
+
+                                                                </div>
+                                                                <div>
+                                                                    <p className="block text-sm font-medium leading-6 text-gray-900">Correct answer</p>
+                                                                    <div className="flex flex-row space-x-24 mt-2">
+                                                                        <div onClick={() => setRecorderState(prev => prev ^ true)}>
+                                                                            <div> <p className="text-sm text-gray-700">{audioAnswer === "" ? "Record audio" : "Retake"}</p> </div>
+                                                                            <div className=""> <Recorder getter={(b64) => {
+                                                                                setAudioAnswer(b64);
+                                                                                setAudioKey(prev => prev + 1);
+                                                                            }} /> </div>
+                                                                        </div>
+
+                                                                        {audioAnswer !== "" && !recorderState ?
+                                                                            <div>
+                                                                                <p className="text-sm text-gray-700">Listen</p>
+                                                                                <audio key={audioKey} style={{ height: "40px" }} controls="controls" autobuffer="autobuffer">
+                                                                                    <source src={audioAnswer} />
+                                                                                </audio>
+                                                                            </div>
+                                                                            :
+                                                                            <></>
+                                                                        }
+                                                                        {/* <p>{audioQuestion}</p> */}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                     }
 
                                                     <div className="sm:col-span-2 sm:col-start-1">
@@ -510,7 +594,7 @@ export default function NewQuestionModal(props) {
                                                         <div className="mt-2">
                                                             <input
                                                                 value={score}
-                                                                onChange={(e) => { setScore(parseInt(e.target.value)) }}
+                                                                onChange={(e) => { setScore(e.target.value) }}
                                                                 type="text"
                                                                 name="score"
                                                                 id="score"

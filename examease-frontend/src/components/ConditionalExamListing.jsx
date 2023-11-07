@@ -1,9 +1,11 @@
 import { CheckCircleIcon, PaperAirplaneIcon } from '@heroicons/react/20/solid';
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import moment from "moment";
-import { CheckBadgeIcon, EyeIcon, RocketLaunchIcon } from '@heroicons/react/24/outline';
+import { ArrowRightCircleIcon, CheckBadgeIcon, EyeIcon, InformationCircleIcon, RocketLaunchIcon } from '@heroicons/react/24/outline';
+import Notification from './Notification';
+import Slideover from './Slideover';
 
 function getColor(index) {
     const colors = ['bg-pink-600', 'bg-purple-600', 'bg-yellow-500', 'bg-green-500'];
@@ -42,6 +44,8 @@ function classNames(...classes) {
 export default function ConditionalExamListing({ heading, exams, comparator, cohort, role }) {
     const naviagate = useNavigate();
     const token = localStorage.getItem('examease_token') || sessionStorage.getItem('examease_token');
+
+    const [publishNotification, setPublishNotification] = useState(false);
 
 
     const publishExam = async (examId) => {
@@ -86,6 +90,12 @@ export default function ConditionalExamListing({ heading, exams, comparator, coh
 
     return (
         <>
+            <Notification
+                heading={"Successfully published!"}
+                body={"Students can now see their grades."}
+                state={publishNotification}
+                getter={() => setPublishNotification(false)}
+            />
             {exams && exams.length === 0 ? <></> :
                 <div className="flex flex-row space-x-2">
                     <h2 className="text-sm font-medium text-gray-500">{heading}</h2>
@@ -116,6 +126,13 @@ export default function ConditionalExamListing({ heading, exams, comparator, coh
                                     :
                                     <></>
                                 }
+                                {exam.graded ?
+                                    <span className="mx-2 inline-flex items-center rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                                        Graded
+                                    </span>
+                                    :
+                                    <></>
+                                }
                                 {/* <p className="text-gray-500">{20} Members</p> */}
                                 <p className="text-gray-500">{exam.description}</p>
                                 {/* <p className="text-gray-500">{moment(new Date(exam.startTime)).from(new Date())}</p> */}
@@ -127,7 +144,7 @@ export default function ConditionalExamListing({ heading, exams, comparator, coh
                             <div className={
                                 `flex-shrink-0 pr-2 space-x-4 ${role === "faculty" ? "" : "mx-4"}`
                             }>
-                                {role === "faculty" && exam.status === "past" ?
+                                {role === "faculty" && exam.status !== "future" && !exam.graded ?
                                     <button
                                         disabled={exam.graded ? true : false}
                                         onClick={() => { handleGrading(exam._id) }}
@@ -140,22 +157,27 @@ export default function ConditionalExamListing({ heading, exams, comparator, coh
                                     :
                                     <></>
                                 }
-                                {role === "faculty" || (role === "student" &&exam.status === "past") ?
+                                {role === "faculty" || (role === "student" && exam.status !== "future") ?
                                     <button
                                         onClick={() => { naviagate(`/questions?examId=${exam._id}&c=${cohort._id}`) }}
                                         type="button"
                                         className="inline-flex items-center rounded-md border border-transparent bg-indigo-100 px-3 py-2 text-sm font-medium leading-4 text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                     >
-                                        {role === "faculty" ? "View" : getExamStatus(exam.startTime, exam.endTime).includes("Available") ? "Start" : "Details"}
-                                        <EyeIcon className="ml-2 -mr-0.5 h-4 w-4" aria-hidden="true" />
+                                        {/* {role === "faculty" ? "View" : getExamStatus(exam.startTime, exam.endTime).includes("Available") && !exam.graded ? "Start" : "Details"} */}
+                                        {role === "student" && exam.status !== "past" ? "Start" : "Details"}
+                                        {role === "student" && exam.status !== "past" ?
+                                            <ArrowRightCircleIcon className="ml-2 -mr-0.5 h-5 w-5" aria-hidden="true" />
+                                            :
+                                            <InformationCircleIcon className="ml-2 -mr-0.5 h-5 w-5" aria-hidden="true" />}
+
                                     </button>
                                     : <></>
                                 }
-                                {role === "faculty" && exam.status === "past" ?
+                                {role === "faculty" && exam.status !== "future" ?
                                     <button
-                                        onClick={() => publishExam(exam._id)}
+                                        onClick={async () => { await publishExam(exam._id); setPublishNotification(true) }}
                                         type="button"
-                                        disabled={exam.published ? true : false}
+                                        // disabled={exam.published ? true : false}
                                         className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                     >
                                         {exam.published ? "Published" : "Pusblish"}

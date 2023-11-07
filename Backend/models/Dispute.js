@@ -5,6 +5,36 @@ const disputeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    subject:{
+        type: String,
+        require: true
+    },
+    studentComment:{
+        type: String
+    },
+    facultyComment:{
+        type: String
+    },
+
+    resolved:{
+        type: Boolean,
+        required: true
+    },
+
+    examTitle:{
+        type: String,
+        required: true
+    },
+    studentName:{
+        type: String,
+        required: true
+    },
+
+    cohortTitle:{
+        type: String,
+        required: true
+    },
+
     exam:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Exam',
@@ -15,16 +45,17 @@ const disputeSchema = new mongoose.Schema({
         ref: 'Cohort',
         required: true
     },
-    resolved:{
-        type: Boolean,
+
+    studentPaper:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'StudentAnswer',
         required: true
     },
-    studentComment:{
-        type: String
-    },
-    facultyComment:{
-        type: String
+    createdAt:{
+        type: Date,
+        required: true
     }
+
 });
 
 module.exports = mongoose.model('Dispute', disputeSchema);

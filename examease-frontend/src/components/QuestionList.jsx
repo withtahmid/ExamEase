@@ -7,6 +7,7 @@ import StudentView from "./StudentView";
 import { TrashIcon } from "@heroicons/react/20/solid";
 import DeleteExamModal from "./DeleteExamModal";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import AudioPlayer from "./AudioPlayer";
 
 const parseStudentQuestions = (questions) => {
     let ret = [];
@@ -19,8 +20,11 @@ const parseStudentQuestions = (questions) => {
             description: questions[key].description,
             mcqOptions: questions[key].mcqOptions,
             myAnswer: questions[key].myAnswer,
+            myAudio: questions[key].myAudio,
             correctAnswer: questions[key].correctAnswer,
-            obtainedScore: questions[key].obtainedScore
+            obtainedScore: questions[key].obtainedScore,
+            audioQuestion: "" || questions[key].audioQuestion,
+            audioAnswer: "" || questions[key].audioAnswer
         }
         ret.push(question);
     }
@@ -39,6 +43,7 @@ export default function QuestionList() {
     const [examDescription, setExamDescription] = useState('');
     const [examPaper, setExamPaper] = useState(null);
     const [graded, setGraded] = useState('');
+    const [published, setPublished] = useState('');
     const [examDuration, setExamDuration] = useState('');
 
 
@@ -68,6 +73,7 @@ export default function QuestionList() {
         setExamDuration(role === "student" ? content.exam.duration : content.duration);
         setExamPaper(role === "student" ? content.myAnswerPaper : null);
         setGraded(role === "student" ? content.exam.graded : content.graded);
+        setPublished(role === "student" ? content.exam.published : content.published);
 
         // console.log(content.questions)
 
@@ -208,7 +214,7 @@ export default function QuestionList() {
 
                 <div>
                     {!currentView ?
-                        <StudentView examDuration={examDuration} graded={graded} role={"faculty"} examTitle={examTitle} examPaper={examPaper} _questions={questions} endTime={endTime} />
+                        <StudentView published={published} examDuration={examDuration} graded={graded} role={"faculty"} examTitle={examTitle} examPaper={examPaper} _questions={questions} endTime={endTime} />
                         :
                         <div className="mt-4 px-4 sm:px-6 lg:px-8">
                             <div>
@@ -285,7 +291,16 @@ export default function QuestionList() {
                                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                                                 {questionIdx + 1}
                                                             </td>
-                                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{question.description}</td>
+                                                            <td className="whitespace-nowrap px-3 py-1 text-sm text-gray-500">
+                                                                {
+                                                                    question.type === "viva" ?
+                                                                        <audio style={{ height: "40px" }} controls="controls" autobuffer="autobuffer">
+                                                                            <source src={question.audioQuestion} />
+                                                                        </audio>
+                                                                        :
+                                                                        <span>{question.description}</span>
+                                                                }
+                                                            </td>
                                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{question.type.toUpperCase()}</td>
                                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{question.score}</td>
                                                             <td className="space-x-4 relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -322,7 +337,7 @@ export default function QuestionList() {
                         </div>
                     }
                 </div> :
-                <StudentView examDuration={examDuration} graded={graded} role={"student"} examTitle={examTitle} examPaper={examPaper} _questions={questions} endTime={endTime} />
+                <StudentView published={published} examDuration={examDuration} graded={graded} role={"student"} examTitle={examTitle} examPaper={examPaper} _questions={questions} endTime={endTime} />
             }
         </div>
     )

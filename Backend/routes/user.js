@@ -1,6 +1,7 @@
 const express  = require('express');
 const router = express.Router();
 const retriver = require('../utils/retriver');
+const formator = require('../utils/formator')
 const User = require('../models/User')
 const Cohort = require('../models/Cohort')
 
@@ -34,6 +35,10 @@ router.get('/', async (req, res) => {
       role: result.role,
       cohorts: cohorts
     };
+    if(result.dp){
+      user.dp = result.dp;
+    }
+
     response = {
       success:true,
       user: user
@@ -46,6 +51,37 @@ router.get('/', async (req, res) => {
       error: e
     }
     return res.status(500).json(response);
+  }
+});
+
+router.post('/', async (req, res) => {
+  
+  const {user} = req.body;
+  if(!user){
+    return res.status(301).json({success: false, message: "user is required"});
+  }
+  
+  const update = await formator.formatUserEditInfo(user);
+  if(!update.ok){
+    return res.status(301).json({success: false, message: update.message});
+  }
+  
+  try{
+    const result = await User.findOneAndUpdate({ email: req.user.email },  update.user, { new: true });
+    if(!result){
+      response = {
+        success: false,
+        message: "User not found"
+      }
+      return res.status(201).json(response);
+    }
+    return res.status(201).json({success: true, message: "User info updated"})
+  }
+  catch(e){
+    return res.status(500).json({
+      success: false,
+      error: e
+    });
   }
 });
 

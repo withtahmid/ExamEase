@@ -82,7 +82,7 @@ export default function AddUserModal(props) {
         console.log(content)
 
 
-        props.onSubmit();
+        props.onSubmit(content);
         // naviage('/');
 
     }
@@ -194,6 +194,7 @@ export default function AddUserModal(props) {
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                                         <button
                                             type="submit"

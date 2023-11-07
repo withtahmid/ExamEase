@@ -339,10 +339,10 @@
   resolved "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.3.1.tgz"
   integrity sha512-EsBwpc7hBUJWAsNPBmJy4hxWx12v6bshQsldrVmjxJoc3isbxhOrF2IcCpaXxfvq03NwkI7sbsOLXbYuqF/8Ww==
 
-"@esbuild/win32-x64@0.18.20":
+"@esbuild/linux-x64@0.18.20":
   version "0.18.20"
-  resolved "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.18.20.tgz"
-  integrity sha512-kTdfRcSiDfQca/y9QIkng02avJ+NCaQvrMejlsB3RRv5sE9rRoeBPISaZpKxHELzRxZyLvNts1P27W3wV+8geQ==
+  resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.18.20.tgz"
+  integrity sha512-UYqiqemphJcNsFEskc73jQ7B9jgwjWrSayxawS6UVFZGWrAAtkzjxSqnoclCXxWtfwLdzU+vTpcNYhpn43uP1w==
 
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
@@ -502,14 +502,14 @@
   resolved "https://registry.npmjs.org/@mui/core-downloads-tracker/-/core-downloads-tracker-5.14.15.tgz"
   integrity sha512-ZCDzBWtCKjAYAlKKM3PA/jG/3uVIDT9ZitOtVixIVmTCQyc5jSV1qhJX8+qIGz4RQZ9KLzPWO2tXd0O5hvzouQ==
 
-"@mui/icons-material@^5.14.14":
+"@mui/icons-material@^5.14.14", "@mui/icons-material@>=5.3.0":
   version "5.14.15"
   resolved "https://registry.npmjs.org/@mui/icons-material/-/icons-material-5.14.15.tgz"
   integrity sha512-Dqu21vN/mVNzebJ+ofnKG+CeJYIhHuDs5+0fMEpdpzRt6UojelzdrEkNv+XkO0e1JMclzeXIRx404FirK/CFRw==
   dependencies:
     "@babel/runtime" "^7.23.2"
 
-"@mui/material@^5.0.0", "@mui/material@^5.14.14", "@mui/material@^5.8.6":
+"@mui/material@^5.0.0", "@mui/material@^5.14.14", "@mui/material@^5.8.6", "@mui/material@>=5.9.1":
   version "5.14.15"
   resolved "https://registry.npmjs.org/@mui/material/-/material-5.14.15.tgz"
   integrity sha512-Gq65rHjvLzkxmhG8bvag851Oqsmru7qkUb/cCI2xu7dQzmY345f9xJRJi72sRGjhaqHXWeRKw/yIwp/7oQoeXg==
@@ -704,6 +704,11 @@
   dependencies:
     "@babel/types" "^7.20.7"
 
+"@types/debounce@*":
+  version "1.2.3"
+  resolved "https://registry.npmjs.org/@types/debounce/-/debounce-1.2.3.tgz"
+  integrity sha512-97mx7gWt4e+kd0wPa1pNEvE4tYGhgBVa4ExWOLcfFohAjF9wERfJ+3qrn7I1e76oHupOvRs4UyYe9xzy0i4TUw==
+
 "@types/node@*", "@types/node@>= 14":
   version "20.8.9"
   resolved "https://registry.npmjs.org/@types/node/-/node-20.8.9.tgz"
@@ -744,6 +749,15 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/react@^17.0.38":
+  version "17.0.69"
+  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.69.tgz"
+  integrity sha512-klEeru//GhiQvXUBayz0Q4l3rKHWsBR/EUOhOeow6hK2jV7MlO44+8yEk6+OtPeOlRfnpUnrLXzGK+iGph5aeg==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
 "@types/scheduler@*":
   version "0.16.4"
   resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.4.tgz"
@@ -753,6 +767,13 @@
   version "4.2.2"
   resolved "https://registry.npmjs.org/@types/stylis/-/stylis-4.2.2.tgz"
   integrity sha512-Rm17MsTpQQP5Jq4BF7CdrxJsDufoiL/q5IbJZYZmOZAJALyijgF7BzLgobXUqraNcQdqFYLYGeglDp6QzaxPpg==
+
+"@types/wavesurfer.js@^5.2.2":
+  version "5.2.2"
+  resolved "https://registry.npmjs.org/@types/wavesurfer.js/-/wavesurfer.js-5.2.2.tgz"
+  integrity sha512-/vjpf81co0SK3z4F5V79fZrFPQ8pw9/fEpgkzcgNVkBa9sY0gAaYzKuaQyCX/yjVf6kc73uPtWABQuVgvpguDQ==
+  dependencies:
+    "@types/debounce" "*"
 
 "@vitejs/plugin-react@^4.0.3":
   version "4.1.0"
@@ -2223,6 +2244,16 @@ ms@2.1.2:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
+mui-audio-player-plus@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.npmjs.org/mui-audio-player-plus/-/mui-audio-player-plus-1.0.6.tgz"
+  integrity sha512-1bSXpxEZxOpZurbn6IqSAEIfrE9+piWFDKfZARPYylPmmVxgdPJqwsWaXcYovuuX/N/MfYj9ibh8JRq9jSEBdA==
+  dependencies:
+    "@types/react" "^17.0.38"
+    "@types/wavesurfer.js" "^5.2.2"
+    throttle-typescript "^1.1.0"
+    wavesurfer-react "^2.2.2"
+
 mz@^2.7.0:
   version "2.7.0"
   resolved "https://registry.npmjs.org/mz/-/mz-2.7.0.tgz"
@@ -3009,6 +3040,11 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
+throttle-typescript@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/throttle-typescript/-/throttle-typescript-1.1.0.tgz"
+  integrity sha512-pxQ+jaKIZZBkRJxbc+CoH3ubz59zgfd8qr0GqHb5NiAIhwHp5SWCHdVnujv/t87EcnFw7BbNrzyLWxNJ1+K6Mg==
+
 to-fast-properties@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/to-fast-properties/-/to-fast-properties-2.0.0.tgz"
@@ -3184,6 +3220,16 @@ vite@^4.2.0, vite@^4.4.5:
     rollup "^3.27.1"
   optionalDependencies:
     fsevents "~2.3.2"
+
+wavesurfer-react@^2.2.2:
+  version "2.2.3"
+  resolved "https://registry.npmjs.org/wavesurfer-react/-/wavesurfer-react-2.2.3.tgz"
+  integrity sha512-GnG2baWB/zWJHA8UiNVEBIq4RAPowMFxz/DPGXa5QfS0v3vIvENXYnnzMu3V+NfPRTZLkfpWCi5tUH9qpFFrNw==
+
+"wavesurfer.js@^4.0.0 || ^5.0.0 || ^6.0.0":
+  version "6.6.4"
+  resolved "https://registry.npmjs.org/wavesurfer.js/-/wavesurfer.js-6.6.4.tgz"
+  integrity sha512-nBbc0pD/3FdClxKUKL1UW2V9AJPL+JOjC8T6/YF9/FCAn4uo+H6Y8VBkXo9UJXIHoBewoc7iXj3tPeL0UCJhjA==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"

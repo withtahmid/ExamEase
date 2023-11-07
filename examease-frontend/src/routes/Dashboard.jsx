@@ -7,6 +7,7 @@ import CohortList from "../components/CohortList";
 
 import jwt_decode from "jwt-decode";
 import { SERVER_URL } from "../../variables";
+import Notification from "../components/Notification";
 
 
 function getColor(index) {

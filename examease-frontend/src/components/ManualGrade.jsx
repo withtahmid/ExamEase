@@ -46,7 +46,7 @@ export default function ManualGrade() {
                 score: questions[key].score,
                 description: questions[key].description,
                 mcqOptions: questions[key].mcqOptions,
-                myAnswer: questions[key].myAnswer,
+                studentAnswer: questions[key].studentAnswer,
                 myAudio: questions[key].myAudio,
                 correctAnswer: questions[key].correctAnswer,
                 obtainedScore: questions[key].obtainedScore,
@@ -223,7 +223,7 @@ export default function ManualGrade() {
                                                     <div className="mt-6">
                                                         <textarea
                                                             disabled={true}
-                                                            value={question.myAnswer || ""}
+                                                            value={question.studentAnswer || ""}
                                                             onChange={(e) => { onChangeInput(e, question._id) }}
                                                             id="myAnswer"
                                                             name="myAnswer"

@@ -5,7 +5,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import CreateExamModal from './CreateExamModal';
 import moment from "moment";
 import ConditionalExamListing from './ConditionalExamListing';
-
+import Notification from './Notification';
+import { SERVER_URL } from './../../variables';
 function getColor(index) {
     const colors = ['bg-pink-600', 'bg-purple-600', 'bg-yellow-500', 'bg-green-500'];
     return colors[index];
@@ -36,8 +37,9 @@ function getExamsArray(cohort) {
             "endTime": cohort.exams[key].endTime,
             "duration": cohort.exams[key].duration,
             "graded": cohort.exams[key].graded,
-            "published": cohort.exams[key].publised,
-            "status": new Date() < new Date(cohort.exams[key].startTime) ? "future" : new Date() > new Date(cohort.exams[key].endTime) ? "past" : "present"
+            "published": cohort.exams[key].published,
+            "status": new Date() < new Date(cohort.exams[key].startTime) ? "future" : new Date() > new Date(cohort.exams[key].endTime) ? "past" : "present",
+            "myAnswerPaper": cohort.exams[key].myAnswerPaper
         }
         exams.push(newExam);
     }
@@ -70,7 +72,7 @@ export default function ExamList(props) {
     const cohortId = searchParams.get("c");
 
     const fetchCohort = async (token) => {
-        const rawResponse = await fetch(`http://localhost:3000/cohorts/${cohortId}`, {
+        const rawResponse = await fetch(`${SERVER_URL}/cohorts/${cohortId}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -79,16 +81,24 @@ export default function ExamList(props) {
             }
         });
         const content = await rawResponse.json();
-        
+
         setCohort(content);
         setExams(getExamsArray(content));
         console.log(content)
 
     }
 
+    useEffect(() => {
+        if ('cohort' in props && props.cohort) {
+            setCohort(props.cohort);
+            setExams(getExamsArray(props.cohort));
+            console.log(getExamsArray(props.cohort))
+        }
+    }, [props])
+
 
     useEffect(() => {
-        fetchCohort(token);
+        // fetchCohort(token);
     }, [newExamState]);
 
     // useEffect(() => {
@@ -96,9 +106,20 @@ export default function ExamList(props) {
     // }, [newExamState])
 
 
+
     const naviagate = useNavigate();
+
+
+
+    const [addExamNotificationState, setAddExamNotificationState] = useState(false);
+    const [addExamNotificationBody, setAddExamNotificationBody] = useState("");
+
+
+
+
+
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="sm:mx-32 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             {/* <div className="flex flex-row justify-end items-end items-end">
                 <button
                     type="button"
@@ -114,7 +135,12 @@ export default function ExamList(props) {
 
             <h2 className=" text-sm font-medium text-gray-500">Current or past exams</h2> */}
 
-
+            <Notification
+                heading={"Sucessfully done!"}
+                body={addExamNotificationBody}
+                state={addExamNotificationState}
+                getter={() => setAddExamNotificationState(false)}
+            />
 
 
 
@@ -142,7 +168,15 @@ export default function ExamList(props) {
             <div>
                 <CreateExamModal
                     state={newExamState}
-                    onSubmit={() => setnewExamState(false)}
+                    onSubmit={(message) => {
+                        setAddExamNotificationBody(message);
+                        setAddExamNotificationState(true);
+                        setnewExamState(false);
+                        setTimeout(() => {
+                            setAddExamNotificationState(false);
+                        }, 5000);
+                    }
+                    }
                     onCancel={() => {
                         setnewExamState(false);
                         // console.log("Canceled");

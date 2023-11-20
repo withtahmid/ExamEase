@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import DisputeList from "./DisputeList";
 import Navbar from "./Navbar";
 
+import { SERVER_URL } from './../../variables';
+
 const myDisputes = [
     {
         id: 1,
@@ -55,7 +57,7 @@ export default function DisputeTabs() {
 
 
     const fetchDisputes = async (token) => {
-        const rawResponse = await fetch(`http://localhost:3000/dispute`, {
+        const rawResponse = await fetch(`${SERVER_URL}/dispute`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

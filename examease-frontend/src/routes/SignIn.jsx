@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
 import App from "../App";
 import Recorder from "../components/Recorder";
+import { SERVER_URL } from './../../variables';
 /*
   This example requires some changes to your config:
   
@@ -32,7 +33,7 @@ export default function SignIn() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const rawResponse = await fetch('http://localhost:3000/login', {
+        const rawResponse = await fetch(`${SERVER_URL}/login`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -57,9 +58,10 @@ export default function SignIn() {
                 sessionStorage.setItem('examease_token', token);
             }
 
-            navigate("/");
+            navigate("/dashboard");
 
             console.log(email + " " + password + " " + remember);
+            return;
         }
 
 
@@ -67,7 +69,8 @@ export default function SignIn() {
 
     useEffect(() => {
         if ('examease_token' in localStorage || 'examease_token' in sessionStorage) {
-            navigate("/");
+            navigate("/dashboard");
+            return;
         }
     }, [])
 

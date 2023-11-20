@@ -2,15 +2,13 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
-import { PlusIcon as PlusIconMini } from '@heroicons/react/20/solid'
+import { InformationCircleIcon, PlusIcon as PlusIconMini } from '@heroicons/react/20/solid'
 import { PlusIcon as PlusIconOutline } from '@heroicons/react/24/outline'
-
-
-
-
+import { SERVER_URL } from './../../variables';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Select from '../components/Select'
 import Recorder from './Recorder'
+import FlipCountdown from '@rumess/react-flip-countdown'
 function getWhitespaces(n) {
     return '&nbsp;'.repeat(n);
 }
@@ -80,6 +78,8 @@ export default function NewQuestionModal(props) {
 
 
     const [counter, setCounter] = useState(3);
+
+    const [saveStatus, setSaveStatus] = useState('');
 
 
 
@@ -154,6 +154,27 @@ export default function NewQuestionModal(props) {
         }
     }
 
+    useEffect(() => {
+        const corectCount = options ? options.filter(op => op.isCorrect).length : 0;
+
+
+
+        if (corectCount < 1) {
+            setSaveStatus('At least one correct option required');
+        } else {
+            setSaveStatus('');
+        }
+    }, [options])
+
+    useEffect(() => {
+        console.log(questionType)
+        if (questionType.toLowerCase() !== "mcq") {
+            setSaveStatus('');
+        } else {
+            setSaveStatus((options ? options.filter(op => op.isCorrect).length : 0) < 1 ? 'At least one correct option required' : '');
+        }
+    }, [questionType])
+
 
     // 
     const onChangeInput = (e, id) => {
@@ -194,86 +215,111 @@ export default function NewQuestionModal(props) {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
 
+        try {
+            e.preventDefault();
 
-
-        const parseOptions = () => {
-            let ret = {
-                mcqOptions: [],
-                mcqAnswers: ""
+            if (saveStatus.length > 15) {
+                return;
             }
-            if (questionType.toLowerCase() !== "mcq") {
+
+            setSaveStatus("Creating...");
+
+
+
+            const parseOptions = () => {
+                let ret = {
+                    mcqOptions: [],
+                    mcqAnswers: ""
+                }
+                if (questionType.toLowerCase() !== "mcq") {
+                    return ret;
+                }
+                for (let i = 0; i < options.length; ++i) {
+                    ret.mcqOptions.push(options[i].text);
+                    ret.mcqAnswers += options[i].isCorrect ? '1' : '0';
+                }
                 return ret;
             }
-            for (let i = 0; i < options.length; ++i) {
-                ret.mcqOptions.push(options[i].text);
-                ret.mcqAnswers += options[i].isCorrect ? '1' : '0';
-            }
-            return ret;
-        }
-
-        console.log(1)
 
 
-        const rawResponse = await fetch(`http://localhost:3000/${props.callStack.now === "delete" ? "delete/question" : "addquestion"}/${props.state ? props.state._id : ""}`, {
-            method: props.callStack.now === "delete" ? 'DELETE' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
+            console.log(`${SERVER_URL}/${props.callStack.now === "delete" ? "delete/question" : "addquestion"}/${props.callStack.now !== "add" && props.state ? props.state._id : ""}`);
+
+            const rawResponse = await fetch(`${SERVER_URL}/${props.callStack.now === "delete" ? "delete/question" : "addquestion"}/${props.callStack.now !== "add" && props.state ? props.state._id : ""}`, {
+                method: props.callStack.now === "delete" ? 'DELETE' : 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    targetExamId: examId,
+                    targetCohortId: cohortId,
+                    question: {
+                        type: questionType.toLowerCase(),
+                        score: score === "" ? 0 : Number(score),
+                        title: questionType !== "Written" ? title : description,
+                        description: description,
+                        mcqOptions: parseOptions().mcqOptions,
+                        mcqAnswer: parseOptions().mcqAnswers,
+                        textAnswer: answer === "" ? "?" : answer,
+                        audioQuestion: audioQuestion,
+                        audioAnswer: audioAnswer
+
+                    }
+                })
+            });
+
+            console.log(JSON.stringify({
                 targetExamId: examId,
                 targetCohortId: cohortId,
                 question: {
                     type: questionType.toLowerCase(),
                     score: score === "" ? 0 : Number(score),
-                    title: questionType !== "Written" ? title : description,
+                    title: questionType.toLowerCase() === "mcq" ? title : description,
                     description: description,
                     mcqOptions: parseOptions().mcqOptions,
                     mcqAnswer: parseOptions().mcqAnswers,
-                    textAnswer: answer === "" ? "?" : answer,
-                    audioQuestion: audioQuestion,
-                    audioAnswer: audioAnswer
+                    textAnswer: answer,
+                    audioQuestion: "",
+                    audioAnswer: ""
 
                 }
-            })
-        });
+            }))
 
-        console.log(JSON.stringify({
-            targetExamId: examId,
-            targetCohortId: cohortId,
-            question: {
-                type: questionType.toLowerCase(),
-                score: score === "" ? 0 : Number(score),
-                title: questionType.toLowerCase() === "mcq" ? title : description,
-                description: description,
-                mcqOptions: parseOptions().mcqOptions,
-                mcqAnswer: parseOptions().mcqAnswers,
-                textAnswer: answer,
-                audioQuestion: "",
-                audioAnswer: ""
 
+            const content = await rawResponse.json();
+            if (!content) {
+                setSaveStatus("Unexpected error occured!");
+                return;
             }
-        }))
+            if (!content.success) {
+                setSaveStatus(content.message);
+                return;
+            }
 
 
-        const content = await rawResponse.json();
+            setSaveStatus("Created!");
 
-        console.log(content);
-        props.onSubmit();
+            console.log(content);
+            props.onSubmit();
 
 
-        setTitle('');
-        setDescription('');
-        setquestionType('MCQ');
-        setAnswer('');
-        setScore("1");
-        setOptions(optionsType);
-        setCounter(3);
-        setAudioQuestion("");
-        setAudioAnswer("");
+            setTimeout(() => {
+                setTitle('');
+                setAudioAnswer("");
+                setDescription('');
+                setAnswer('');
+                setScore("1");
+                setOptions(optionsType);
+                setCounter(3);
+                setAudioQuestion("");
+                setquestionType('MCQ');
+            }, 1000);
+        } catch (e) {
+            setSaveStatus("Unexpected error occured!");
+            console.log(e);
+        }
     }
     return (
         <Transition.Root show={props.modalState} as={Fragment}>
@@ -348,11 +394,13 @@ export default function NewQuestionModal(props) {
                                                     </div>
                                                     {questionType !== "Viva" ?
                                                         <div className="sm:col-span-2">
+
                                                             <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
                                                                 Question statement
                                                             </label>
                                                             <div className="mt-2">
                                                                 <textarea
+                                                                    required={true}
                                                                     value={description}
                                                                     onChange={(e) => { setDescription(e.target.value) }}
                                                                     id="description"
@@ -383,6 +431,7 @@ export default function NewQuestionModal(props) {
                                                             </label>
                                                             <div className="mt-2">
                                                                 <input
+                                                                    required={true}
                                                                     value={title}
                                                                     onChange={(e) => { setTitle(e.target.value) }}
                                                                     type="text"
@@ -454,7 +503,7 @@ export default function NewQuestionModal(props) {
                                                                                                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                                                                                                         <input
                                                                                                             value={text}
-                                                                                                            required
+                                                                                                            required={true}
                                                                                                             onChange={(e) => { onChangeInput(e, id) }}
                                                                                                             type="text"
                                                                                                             name="text"
@@ -540,10 +589,12 @@ export default function NewQuestionModal(props) {
                                                                     <div className="flex flex-row space-x-24 mt-2">
                                                                         <div onClick={() => setRecorderState(prev => prev ^ true)}>
                                                                             <div> <p className="text-sm text-gray-700">{audioQuestion === "" ? "Record audio" : "Retake"}</p> </div>
-                                                                            <div className=""> <Recorder getter={(b64) => {
-                                                                                setAudioQuestion(b64);
-                                                                                setAudioKey(prev => prev + 1);
-                                                                            }} /> </div>
+                                                                            <div className=""> <Recorder
+                                                                                required={true}
+                                                                                getter={(b64) => {
+                                                                                    setAudioQuestion(b64);
+                                                                                    setAudioKey(prev => prev + 1);
+                                                                                }} /> </div>
                                                                         </div>
 
                                                                         {audioQuestion !== "" && !recorderState ?
@@ -607,6 +658,20 @@ export default function NewQuestionModal(props) {
                                             </div>
                                         </div>
                                     </div>
+                                    {saveStatus.length > 15 ?
+                                        <div className="mt-3 -mb-2 rounded-md bg-red-50 p-2">
+                                            <div className="flex">
+                                                <div className="flex-shrink-0">
+                                                    <InformationCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+                                                </div>
+                                                <div className="ml-3 flex-1 md:flex md:justify-between">
+                                                    <p className="text-sm text-red-800">{saveStatus}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        :
+                                        <></>
+                                    }
                                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                                         <button
                                             type="submit"
@@ -618,6 +683,16 @@ export default function NewQuestionModal(props) {
                                             }
                                         >
                                             {props.callStack.now === "edit" ? "Update" : props.callStack.now === "delete" ? "Delete" : "Create"}
+                                            {saveStatus === "Creating..." ?
+                                                <svg className="animate-spin ml-3 w-5 h-5 fill-white" viewBox="3 3 18 18">
+                                                    <path className="opacity-40" d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z">
+                                                    </path>
+                                                    <path d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z">
+                                                    </path>
+                                                </svg>
+                                                :
+                                                <></>
+                                            }
                                         </button>
                                         <button
                                             onClick={props.onCancel}
@@ -627,6 +702,7 @@ export default function NewQuestionModal(props) {
                                             Cancel
                                         </button>
                                     </div>
+
                                 </form>
                             </Dialog.Panel>
                         </Transition.Child>

@@ -35,6 +35,9 @@ router.post('/', async (req, res) => {
             return res.status(201).json({success: false, message: "Something went wrong"});
         }
 
+
+       
+
         // restrictions -----------------------------------------
 
         // if(exam.published){

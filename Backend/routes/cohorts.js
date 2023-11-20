@@ -5,6 +5,7 @@ const User = require('../models/User')
 const Cohort = require('../models/Cohort')
 const Exam = require('../models/Exam');
 const mongoose = require('mongoose');
+const StudentAnswer = require('../models/StudentAnswer');
 const ObjectId = mongoose.Types.ObjectId;
 
 router.get('/', async (req, res) => {
@@ -64,8 +65,11 @@ router.get('/:cohortId', async (req, res) => {
       faculty_name: faculty.name
     }
     let exams = {};
-    cohort.exams.forEach(val => {
-        exams[val._id.toString()] = {
+    for(let x in cohort.exams) {
+  
+      const val = cohort.exams[x];
+      const key = val._id.toString();
+        exams[key] = {
           _id: val._id.toString(),
           title: val.title,
           description: val.description,
@@ -74,9 +78,26 @@ router.get('/:cohortId', async (req, res) => {
           endTime: val.endTime,
           duration: val.duration,
           published: val.published,
-          graded: val.graded
-        };
-    });
+          graded: val.graded,
+          myAnswerPaper: null,
+          totalScore: null
+        }; 
+        const ans = val.studentAnswers.filter(ans => ans.student == req.user.email);
+        if(ans.length == 1){
+          const paper = await StudentAnswer.findById(ans[0].answer);
+          if(paper){
+            exams[key].myAnswerPaper = {
+              _id: paper._id,
+              startTime: paper.startTime,
+              submitted: paper.submitted,
+            }
+            if(paper.totalScore){
+              exams[key].totalScore = paper.totalScore;
+            }
+          }
+        }
+
+    };
 
     returnCohort.exams = exams;
     returnCohort.students = cohort.students

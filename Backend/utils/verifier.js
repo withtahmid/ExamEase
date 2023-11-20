@@ -74,10 +74,10 @@ function isValidDateFormat(dateString) {
         };
     }
 
-    if (exam.title.length < 5 || exam.title.length > 30) {
+    if (exam.title.length < 1 || exam.title.length > 500) {
         return {
             status: false,
-            message: "Exam title length must be between 5 and 30 characters"
+            message: "Exam title length must be between 1 and 500 characters"
         };
     }
     if (exam.description.length > 200) {
@@ -168,7 +168,7 @@ function verifyQuestionFormat(question){
         if(!question.textAnswer || !question.title){
             return false;
         }
-        if(question.textAnswer.length < 1 || question.textAnswer.length > 200){
+        if(question.textAnswer.length < 1 || question.textAnswer.length > 1000){
             return false;
         }
         return true;

@@ -119,6 +119,8 @@ router.get('/:examId', async (req, res) => {
         totalScore: null
       };
 
+   
+
       if(exam.published){
         myAnswerPaper.totalScore = studentPaper.totalScore
       }

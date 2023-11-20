@@ -4,6 +4,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom';
 
+import { SERVER_URL } from './../../variables';
+
 function getWhitespaces(n) {
     return '&nbsp;'.repeat(n);
 }
@@ -30,7 +32,7 @@ export default function Modal(props) {
         e.preventDefault();
 
 
-        const rawResponse = await fetch('http://localhost:3000/createnewcohort', {
+        const rawResponse = await fetch(`${SERVER_URL}/createnewcohort`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

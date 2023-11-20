@@ -9,6 +9,7 @@ import CreateExamModal from '../components/CreateExamModal';
 import AddUserModal from '../components/AddUserModal';
 import DeleteCohortModal from '../components/DeleteCohortModal';
 import Notification from '../components/Notification';
+import { SERVER_URL } from './../../variables';
 
 const profile = {
     name: 'CSE 311.9',
@@ -46,7 +47,7 @@ export default function Cohort() {
 
 
     const fetchCohort = async (token, cohortId) => {
-        const rawResponse = await fetch(`http://localhost:3000/cohorts/${cohortId}`, {
+        const rawResponse = await fetch(`${SERVER_URL}/cohorts/${cohortId}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -60,7 +61,7 @@ export default function Cohort() {
     }
 
     const fetchUser = async (token) => {
-        const rawResponse = await fetch('http://localhost:3000/user', {
+        const rawResponse = await fetch(`${SERVER_URL}/user`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -83,7 +84,7 @@ export default function Cohort() {
     const navigate = useNavigate();
 
     const deleteCohort = async (token, cohortId) => {
-        const rawResponse = await fetch(`http://localhost:3000/delete/cohort/${cohortId}`, {
+        const rawResponse = await fetch(`${SERVER_URL}/delete/cohort/${cohortId}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -102,12 +103,14 @@ export default function Cohort() {
 
 
 
+
+
     return (
         <div>
             <Navbar name={name} email={email} role={role} token={token} getter={() => { }} />
 
 
-            <div className="mx-10 my-6">
+            <div className="sm:mx-32 my-6">
                 <div>
                     <img className="rounded-t-lg h-32 w-full object-cover lg:h-48" src={profile.backgroundImage} alt="" />
                 </div>
@@ -189,6 +192,9 @@ export default function Cohort() {
                     setAddStudentNotificationBody(`${message.added} student(s) added, ${message.invited} invited.`);
                     setNewUserState(false);
                     setAddStudentNotificationState(true);
+                    setTimeout(() => {
+                        setAddStudentNotificationState(false);
+                    }, 5000);
                 }
                 }
                 onCancel={() => {

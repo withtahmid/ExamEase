@@ -60,7 +60,7 @@ export default function ExamHeading({ heading, onSave, saveStatus, published, ro
 
 
                 <span className="ml-3 mt-1">
-                    {
+                    {/* {
                         mode !== "Dispute" ?
                             <span className="inline-flex items-center rounded-full bg-green-400 px-2.5 py-0.5 text-xs font-medium text-gray-50">
                                 <CheckIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
@@ -68,7 +68,7 @@ export default function ExamHeading({ heading, onSave, saveStatus, published, ro
                             </span>
                             :
                             <></>
-                    }
+                    } */}
                 </span>
 
                 <span className="ml-3 hidden sm:block">

@@ -1,12 +1,13 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Select from './Select';
 import NewQuestionModal from './NewQuestionModal';
 import ExamTimePicker from './ExamTimePicker';
-
+import Notification from './Notification';
+import { SERVER_URL } from './../../variables';
 
 function getWhitespaces(n) {
     return '&nbsp;'.repeat(n);
@@ -44,6 +45,8 @@ export default function CreateExamModal(props) {
     const [finishTime, setFinishTime] = useState('');
     const [finishDate, setFinishDate] = useState('');
 
+    const [saveStatus, setSaveStatus] = useState('');
+
     const [searchParams, setSearchParams] = useSearchParams();
     const cohortId = searchParams.get("c");
 
@@ -51,54 +54,62 @@ export default function CreateExamModal(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSaveStatus('Creating...');
 
 
+        try {
+            const rawResponse = await fetch(`${SERVER_URL}/createexam`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    targetCohortId: cohortId,
+                    title: examName,
+                    color: getColorIndex(),
+                    description: examDescription,
+                    startTime: startTime,
+                    endTime: finishTime,
+                    duration: examDuration,
+                    graded: false,
+                    published: false
+                })
+            });
 
-
-        const rawResponse = await fetch('http://localhost:3000/createexam', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
+            console.log(JSON.stringify({
                 targetCohortId: cohortId,
                 title: examName,
                 color: getColorIndex(),
                 description: examDescription,
                 startTime: startTime,
                 endTime: finishTime,
-                duration: examDuration,
-                graded: false,
-                published: false
-            })
-        });
+                duration: examDuration
+            }))
+            const content = await rawResponse.json();
 
-        console.log(JSON.stringify({
-            targetCohortId: cohortId,
-            title: examName,
-            color: getColorIndex(),
-            description: examDescription,
-            startTime: startTime,
-            endTime: finishTime,
-            duration: examDuration
-        }))
-        const content = await rawResponse.json();
+            if (content.success) {
+                setSaveStatus('Created!');
+                setExamName('');
+                setExamDuration('');
+                setStartTime('');
+                setStartDate('');
+                setFinishTime('');
+                setFinishDate('');
+                props.onSubmit(`${examName} has been created.`);
 
-        // props.getter(content);
+            } else {
+                setSaveStatus(content.message);
+            }
 
-        console.log(content);
+            console.log(content);
 
-        setExamName('');
-        setExamDuration('');
-        setStartTime('');
-        setStartDate('');
-        setFinishTime('');
-        setFinishDate('');
 
-        props.onSubmit();
-        // naviage('/');
+        } catch (err) {
+            setSaveStatus('Failed!');
+
+        }
 
     }
 
@@ -155,7 +166,7 @@ export default function CreateExamModal(props) {
                                                 <p dangerouslySetInnerHTML={{ __html: getWhitespaces(200) }}></p>
 
 
-                                                <div className=" flex flex-col space-y-4">
+                                                <div className="flex flex-col space-y-4">
                                                     <div className="sm:col-span-3">
                                                         <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                                                             Exam name
@@ -287,12 +298,40 @@ export default function CreateExamModal(props) {
                                             </div>
                                         </div>
                                     </div>
+                                    {saveStatus.length > 12 ?
+                                        <div className="mt-3 -mb-2 rounded-md bg-red-50 p-2">
+                                            <div className="flex">
+                                                <div className="flex-shrink-0">
+                                                    <InformationCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+                                                </div>
+                                                <div className="ml-3 flex-1 md:flex md:justify-between">
+                                                    <p className="text-sm text-red-800">{saveStatus}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        :
+                                        <></>
+                                    }
+
+
                                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+
                                         <button
                                             type="submit"
                                             className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
                                         >
                                             Create
+                                            {saveStatus === "Creating..." ?
+                                                <svg className="animate-spin ml-3 w-5 h-5 fill-white" viewBox="3 3 18 18">
+                                                    <path className="opacity-40" d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z">
+                                                    </path>
+                                                    <path d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z">
+                                                    </path>
+                                                </svg>
+                                                :
+                                                <>
+                                                </>
+                                            }
                                         </button>
                                         <button
                                             onClick={props.onCancel}

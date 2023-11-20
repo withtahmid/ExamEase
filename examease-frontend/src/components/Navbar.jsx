@@ -5,16 +5,18 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PlusIcon } from '@heroicons/react/20/solid'
 import Modal from "./Modal";
 
+import { SERVER_URL } from './../../variables';
+
 
 const navigation = [
-    { name: 'Dashboard', href: '/', current: true },
+    { name: 'Dashboard', href: '/dashboard', current: true },
     { name: 'Team', href: '#', current: false },
     { name: 'Cohorts', href: '#', current: false },
     { name: 'Disputes', href: '/disputes', current: false },
 ]
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
-    { name: 'Settings', href: '#' },
+    { name: 'Settings', href: '/settings' },
     { name: 'Sign out', href: '/signout' },
 ]
 
@@ -27,8 +29,37 @@ function titleCase(str) {
         s + "" + (c.charAt(0).toUpperCase() + c.slice(1) + " "), '');
 }
 
-export default function Navbar({ name, email, role, token, getter }) {
-    const [newCohortState, setNewCohortState] = useState(false)
+export default function Navbar({ getter }) {
+    const token = localStorage.getItem('examease_token') || sessionStorage.getItem('examease_token');
+    const [newCohortState, setNewCohortState] = useState(false);
+
+    const [image, setImage] = useState('profile_image' in sessionStorage ? sessionStorage.getItem('profile_image') : 'https://e7.pngegg.com/pngimages/442/17/png-clipart-computer-icons-user-profile-male-user-heroes-head.png');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [role, setRole] = useState('student');
+
+
+    const fetchInfo = async (token) => {
+        const rawResponse = await fetch(`${SERVER_URL}/user/`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const content = await rawResponse.json();
+        const imageURL = '' || 'data:image/png;base64,' + content.user.dp;
+        setImage(imageURL.length > 50 ? imageURL : image);
+
+        if (imageURL.length > 50) {
+            sessionStorage.setItem('profile_image', imageURL);
+
+        }
+        setName('' || content.user.name);
+        setEmail('' || content.user.email);
+        setRole('' || content.user.role);
+    }
 
 
     const user = {
@@ -38,7 +69,9 @@ export default function Navbar({ name, email, role, token, getter }) {
         imageUrl:
             'https://pbs.twimg.com/profile_images/1582415987592548352/b_mJIgmn_400x400.jpg',
     }
-
+    useEffect(() => {
+        fetchInfo(token);
+    }, [])
 
     return (
         <Disclosure as="nav" className="bg-gray-800">
@@ -87,7 +120,7 @@ export default function Navbar({ name, email, role, token, getter }) {
                                 </div>
                             </div>
                             <div className="flex items-center">
-                                {user.role === 'faculty' ?
+                                {role === 'faculty' ?
                                     <div className="flex-shrink-0">
                                         <button
                                             type="button"
@@ -115,7 +148,7 @@ export default function Navbar({ name, email, role, token, getter }) {
                                         <div>
                                             <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                 <span className="sr-only">Open user menu</span>
-                                                <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                                                <img className="h-8 w-8 rounded-full" src={image} alt="" />
                                             </Menu.Button>
                                         </div>
                                         <Transition
@@ -185,18 +218,18 @@ export default function Navbar({ name, email, role, token, getter }) {
                         <div className="border-t border-gray-700 pt-4 pb-3">
                             <div className="flex items-center px-5 sm:px-6">
                                 <div className="flex-shrink-0">
-                                    <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                                    <img className="h-10 w-10 rounded-full" src={image} alt="" />
                                 </div>
                                 <div className="ml-3">
-                                    <div className="text-base font-medium text-white">{user.name}
+                                    <div className="text-base font-medium text-white">{name}
 
                                         <span className="mx-2 inline-flex items-center rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-gray-800">
-                                            {titleCase(user.role)}
+                                            {titleCase(role)}
                                         </span>
 
                                     </div>
 
-                                    <div className="text-sm font-medium text-gray-400">{user.email}</div>
+                                    <div className="text-sm font-medium text-gray-400">{email}</div>
                                 </div>
                                 <button
                                     type="button"

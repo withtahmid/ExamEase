@@ -1,4 +1,4 @@
-let x = new Date().toString()
+let x = new Date().getTime()
 
 
 console.log(x)

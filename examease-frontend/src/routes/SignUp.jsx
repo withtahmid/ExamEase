@@ -61,14 +61,11 @@ export default function SignUp() {
 
             const token = content['accessToken'];
             localStorage.setItem('examease_token', token);
-            navigate('/');
-
-
-            // navigate('/login', { state: { token: token } });
+            navigate('/dashboard');
 
             console.log(content);
-
             console.log(fname + " " + lname + " " + email + " " + password + " " + role)
+            return;
         }
     }
 

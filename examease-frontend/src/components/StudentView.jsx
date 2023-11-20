@@ -15,8 +15,11 @@ import Recorder from "./Recorder"
 import Slideover from "./Slideover"
 
 import ExamHeading from "./ExamHeading"
+import FlipCountdown from "@rumess/react-flip-countdown"
 
-export default function StudentView({ role, examTitle, examPaper, _questions, endTime, graded, published, examDuration }) {
+import { SERVER_URL } from './../../variables';
+
+export default function StudentView({ user, role, examTitle, examPaper, _questions, endTime, graded, published, examDuration }) {
     const token = localStorage.getItem('examease_token') || sessionStorage.getItem('examease_token');
     // Total time remaining in seconds
     const [seconds, setSeconds] = useState(null);
@@ -28,6 +31,8 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
 
     const [questions, setQuestions] = useState();
 
+    const [lastSaved, setLastSaved] = useState();
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const examId = searchParams.get('examId');
@@ -35,6 +40,9 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
 
     const [audioKey, setAudioKey] = useState(1);
     const [recorderState, setRecorderState] = useState(false);
+
+
+    const [obtainedScores, setObtainedScores] = useState(null);
 
     const onChangeInput = (e, id) => {
         const { name, value } = e.target;
@@ -90,6 +98,9 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
     // useEffect(() => {
     //     setSeconds(Math.floor((new Date(endTime) - new Date()) / 1000));
     // }, [endTime]);
+
+
+    const [timerEndAt, setTimerEndAt] = useState(0);
     useEffect(() => {
         setAudioKey(prev => prev + 1);
         if (examPaper) {
@@ -99,18 +110,33 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
             // console.log('EC: ' + new Date(endTime));
             // console.log(Math.floor((new Date(examPaper.startTime).getTime() + examDuration * 60 - new Date().getTime()) / 1000));
             if (role === "student") {
-                setSeconds(Math.floor((Math.min(new Date(endTime).getTime(), new Date(examPaper.startTime).getTime() + examDuration * 60 * 1000) - new Date().getTime()) / 1000));
+                let sec = Math.floor((Math.min(new Date(endTime).getTime(), new Date(examPaper.startTime).getTime() + examDuration * 60 * 1000) - new Date().getTime()) / 1000);
+                setTimerEndAt(new Date(new Date().getTime() + sec * 1000));
+                setSeconds(sec);
             }
         }
     }, [examDuration]);
 
 
+
+    const initLastSaved = async (ques) => {
+        setLastSaved(await parseAnswers(ques));
+    };
+
     useEffect(() => {
         setAudioKey(prev => prev + 1);
         if (_questions) {
             setLoading(false);
+            initLastSaved(_questions);
 
-            console.log(_questions)
+            console.log(_questions);
+            let scores = new Array();
+            _questions.map(question => {
+                scores.push(question.obtainedScore);
+            });
+            setObtainedScores(scores);
+
+            console.log(scores)
 
 
             if (`${token}-${examId}-${cohortId}` in sessionStorage) {
@@ -124,7 +150,7 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
 
         if (examPaper) {
             setPaperId(examPaper._id);
-            if (examPaper.submitted) setSaveStatus("Submitted!");
+            if (examPaper && examPaper.submitted) setSaveStatus("Submitted!");
         }
 
         if (_questions && examPaper) {
@@ -137,21 +163,35 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
 
 
 
-    const parseAnswers = async () => {
+    const parseAnswers = async (ques) => {
         let ret = {}
-        for (let i = 0; i < questions.length; ++i) {
-            ret[`${questions[i]._id}`] = questions[i].myAnswer;
+        if (!ques) return ret;
+        for (let i = 0; i < ques.length; ++i) {
+            ret[`${ques[i]._id}`] = ques[i].myAnswer;
         }
         return ret;
     };
 
+    const checkSaved = async () => {
+
+        let now = await parseAnswers(questions);
+        if (now !== lastSaved) {
+            console.log(JSON.stringify(lastSaved) === JSON.stringify(now))
+            console.log(lastSaved)
+        }
+    };
+
+    useEffect(() => {
+
+        checkSaved();
+    }, [questions, lastSaved]);
 
 
 
 
     const handleSave = async (paperId, submit = false) => {
-        setSaveStatus("Submitting...");
-        const rawResponse = await fetch(`http://localhost:3000/submitanswer`, {
+        if (submit) setSaveStatus("Submitting...");
+        const rawResponse = await fetch(`${SERVER_URL}/submitanswer`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -160,8 +200,8 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
             },
             body: JSON.stringify({
                 targetAnswerId: paperId,
-                answers: await parseAnswers(),
-                submit: false
+                answers: await parseAnswers(questions),
+                submit: submit
             })
 
         });
@@ -172,13 +212,15 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
 
         const content = await rawResponse.json();
         console.log(content);
-        setSaveStatus("Submitted!");
+        if (submit) setSaveStatus("Submitted!");
+        if (submit) setTimerEndAt(new Date());
+        setLastSaved(await parseAnswers(questions));
 
 
 
         console.log(JSON.stringify({
             targetAnswerId: paperId,
-            answers: await parseAnswers(),
+            answers: await parseAnswers(questions),
             submit: false
         }))
 
@@ -199,7 +241,8 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
 
 
     const handleDisputeSubmit = async (subject, studentComment) => {
-        const rawResponse = await fetch(`http://localhost:3000/dispute/create`, {
+        setSaveStatus("Submitting dispute...");
+        const rawResponse = await fetch(`${SERVER_URL}/dispute/create`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -217,6 +260,8 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
 
         const content = await rawResponse.json();
         console.log(content);
+        setSaveStatus("Dispute submitted!");
+
 
     }
 
@@ -225,15 +270,15 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
     const [disputeState, setDisputeState] = useState(false);
 
 
-    const MINUTE_MS = 1000;
+    // const MINUTE_MS = 1000;
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setSeconds((prev) => prev - 1);
-        }, MINUTE_MS);
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         setSeconds((prev) => prev - 1);
+    //     }, MINUTE_MS);
 
-        return () => clearInterval(interval);
-    }, [])
+    //     return () => clearInterval(interval);
+    // }, [])
 
     // useEffect(() => {
     //     const interval = setInterval(() => {
@@ -244,13 +289,15 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
     //     return () => clearInterval(interval);
     // }, [loading])
     return (
-        <div>
+        <div className="-mx-56">
 
             {loading ?
-                <div className="flex flex-col h-screen justify-center items-center">
-                    <div className="text-center m-auto">
-                        <span className="loading loading-dots loading-lg text-indigo-500"></span>
-                        <p>Loading Exam</p>
+                <div className="flex h-screen">
+                    <div className="m-auto">
+                        <div className="flex flex-row space-x-2 items-center">
+                            <span className="loading loading-ring loading-lg text-indigo-700"></span>
+                            <p className="text-indigo-900 font-medium text-md">Loading exam</p>
+                        </div>
                     </div>
                 </div>
                 :
@@ -345,16 +392,55 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
                                 <ul role="list" className="divide-y divide-gray-300">
                                     {questions && questions.map((question, idx) => (
                                         <li key={question._id} className="flex flex-col gap-x-6 py-5">
+
                                             <div className="flex min-w-0 gap-x-4">
+
                                                 {/* <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={question.imageUrl} alt="" /> */}
                                                 <div className="min-w-0 flex flex-row space-x-4">
                                                     <p className="text-xl leading-6 text-gray-900">{`${idx + 1}. `}
                                                         {`${question.type === "viva" ? "[Viva Question]" : question.description}`}</p>
                                                     <span className="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800">
-                                                        {role === "student" && graded && published ? `${question.obtainedScore || 0} / ${question.score}` : `${question.score} mark${question.score > 0 ? 's' : ''}`}
+                                                        {role === "student" && graded && published ? `${obtainedScores ? obtainedScores[idx] : 0} / ${question.score}` : `${question.score} mark${question.score > 0 ? 's' : ''}`}
                                                     </span>
                                                     {/* <p className="mt-1 truncate text-xs leading-5 text-gray-500">{question.email}</p> */}
                                                 </div>
+                                                {seconds === 0 || graded || published || (examPaper && examPaper.submitted) ?
+                                                    <></>
+                                                    :
+                                                    <button
+                                                        disabled={lastSaved && lastSaved[`${question._id}`] === question.myAnswer}
+                                                        onClick={async () => {
+                                                            setSaveStatus(`Saving... ${question._id}`);
+                                                            await handleSave(paperId, false)
+                                                            setSaveStatus(`Saved!`);
+                                                        }
+                                                        } type="button"
+                                                        className={lastSaved && lastSaved[`${question._id}`] === question.myAnswer ?
+                                                            `inline-flex items-center rounded-md bg-green-500 pl-2 pr-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500` :
+                                                            `inline-flex items-center rounded-md bg-indigo-600 pl-2 pr-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}>
+
+
+                                                        {lastSaved && lastSaved[`${question._id}`] === question.myAnswer ? <div className="flex flex-row">
+                                                            <span className="-ml-1">
+
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-4 h-4">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                                </svg>
+                                                            </span>
+                                                            <p className="">
+
+                                                                Saved
+                                                            </p>
+                                                        </div> : "Save"}
+
+
+                                                    </button>
+                                                }
+                                                {saveStatus === `Saving... ${question._id}` ?
+                                                    <span className="-ml-2 loading loading-ring loading-md text-indigo-600"></span>
+                                                    :
+                                                    <></>
+                                                }
                                             </div>
                                             {question.type === "mcq" ? <div className="sm:w-1/3">
                                                 <ListOptions
@@ -380,6 +466,7 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
                                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                             // defaultValue={''}
                                                             />
+
                                                         </div>
 
 
@@ -401,12 +488,16 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
                                                             </audio>
                                                             <div className="mt-2"> <p className="text-sm text-gray-700">Answer</p> </div>
                                                             <div className="flex flex-row space-x-4 mt-3 -mb-4">
-                                                                <div onClick={() => setRecorderState(prev => prev ^ true)}>
-                                                                    <Recorder getter={(b64) => {
-                                                                        onChangeAudio(b64, question._id);
-                                                                        setAudioKey(prev => prev + 1);
-                                                                    }} />
-                                                                </div>
+                                                                {examPaper && examPaper.submitted || published || graded ?
+                                                                    <></> :
+                                                                    <div onClick={() => setRecorderState(prev => prev ^ true)}>
+
+                                                                        <Recorder getter={(b64) => {
+                                                                            onChangeAudio(b64, question._id);
+                                                                            setAudioKey(prev => prev + 1);
+                                                                        }} />
+                                                                    </div>
+                                                                }
                                                                 {!recorderState && question.myAnswer && question.myAnswer !== "" ?
                                                                     <audio key={audioKey} style={{ height: "40px" }} controls="controls" autobuffer="autobuffer">
                                                                         <source src={question.myAnswer.length > 1000 ? question.myAnswer : question.myAudio} />
@@ -442,14 +533,27 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
                             </div>
 
 
-                            {role === "student" && (!published && !examPaper.submitted && new Date() < endTime) ?
-                                <div className="sm:ml-96 w-1/3 sm:-mr-16 sm:-mt-24" >
-                                    <div className="sticky space-y-2">
+                            {role === "student" && examPaper && (!published && !examPaper.submitted) && new Date() < new Date(endTime) ?
+                                <div className="" >
+                                    <div className="sticky space-y-2 -mt-12">
                                         <div className="inline-flex justify-center bg-white text-md text-gray-700">
                                             <ClockIcon className="-ml-1 mr-2 h-6 w-6 text-indigo-400" aria-hidden="true" />
                                             <span className="font-medium text-gray-900">Until finish</span>
                                         </div>
-                                        <CountDown seconds={saveStatus === "Submitted!" ? 0 : seconds} />
+                                        {/* <CountDown seconds={saveStatus === "Submitted!" ? 0 : seconds} />
+                                         */}
+                                        <div className="">
+                                            <FlipCountdown
+
+                                                size="medium"
+                                                theme="light"
+                                                hideYear={true}
+                                                hideMonth={true}
+                                                hideDay={true}
+                                                endAtZero={true}
+                                                endAt={timerEndAt} // Date/Time
+                                            />
+                                        </div>
                                         <div className="inline-flex justify-center bg-white text-md text-gray-700">
                                             <CloudArrowUpIcon className="-ml-1 mr-2 h-6 w-6 text-gray-400" aria-hidden="true" />
                                             {saveStatus === "Saving..." ? <span className="loading loading-ring loading-md"></span> : <></>}
@@ -498,9 +602,11 @@ export default function StudentView({ role, examTitle, examPaper, _questions, en
 
 
                     <Slideover
+                        user={user}
+                        saveStatus={saveStatus}
                         onSubmit={async (subject, studentComment) => {
                             await handleDisputeSubmit(subject, studentComment);
-                            setDisputeState(false)
+                            setDisputeState(false);
                         }}
                         onCancel={() => setDisputeState(false)}
                         state={disputeState}

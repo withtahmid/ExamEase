@@ -33,6 +33,7 @@ router.get('/', async (req, res) => {
       name: result.name,
       email: result.email,
       role: result.role,
+      dp: null,
       cohorts: cohorts
     };
     if(result.dp){

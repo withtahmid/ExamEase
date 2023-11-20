@@ -53,7 +53,6 @@ function generateInvitationEmail(emailId, cohortName) {
 async function sendEmail(email) {
   try {
     const response = await axios.post(apiUrl, email);
-    console.log(response);
   }
   catch (e) {
     return;

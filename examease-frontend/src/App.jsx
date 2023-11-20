@@ -12,12 +12,18 @@ import DisputeList from './components/DisputeList';
 import DisputeListHeading from './components/DisputeListHeading';
 import DisputeTabs from './components/DisputeTabs';
 import ManualGrade from './components/ManualGrade';
+import Landing from './routes/Landing';
 
 
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Landing />,
+    // errorElement: <NotFound />
+  },
+  {
+    path: "/dashboard",
     element: <Dashboard />,
     // errorElement: <NotFound />
   },

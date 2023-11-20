@@ -7,6 +7,8 @@ import Select from './Select';
 import ExamList from './ExamList';
 import { PlusCircleIcon } from '@heroicons/react/20/solid';
 
+import { SERVER_URL } from './../../variables';
+
 function getWhitespaces(n) {
     return '&nbsp;'.repeat(n);
 }
@@ -64,7 +66,8 @@ export default function AddUserModal(props) {
         }
         console.log(send)
 
-        const rawResponse = await fetch('http://localhost:3000/addstudenttocohort', {
+
+        const rawResponse = await fetch(`${SERVER_URL}/addstudenttocohort`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -194,7 +197,7 @@ export default function AddUserModal(props) {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                                         <button
                                             type="submit"

@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Switch, Transition } from '@headlessui/react'
 import {
     ArrowLeftOnRectangleIcon,
@@ -9,11 +9,15 @@ import {
     CogIcon,
     DocumentMagnifyingGlassIcon,
     HomeIcon,
+    PhotoIcon,
     QuestionMarkCircleIcon,
     UsersIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import Navbar from '../components/Navbar'
+import Notification from '../components/Notification'
+import { SERVER_URL } from './../../variables';
 
 const navigation = [
     { name: 'Home', href: '#', icon: HomeIcon, current: false },
@@ -41,12 +45,92 @@ function classNames(...classes) {
 }
 
 export default function Settings() {
+    const token = localStorage.getItem('examease_token') || sessionStorage.getItem('examease_token');
+
+
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [automaticTimezoneEnabled, setAutomaticTimezoneEnabled] = useState(true)
     const [autoUpdateApplicantDataEnabled, setAutoUpdateApplicantDataEnabled] = useState(false)
 
+
+    const [saveStatus, setSaveStatus] = useState('');
+
+    const [nameToggle, setNameToggle] = useState(false);
+    const [name, setName] = useState('');
+    const [nameChangeNotification, setNameChangeNotification] = useState(false);
+    const [imageChangeNotification, setImageChangeNotification] = useState(false);
+
+
+    const [image, setImage] = useState('' || sessionStorage.getItem('profile_image'));
+
+    const [imageChosen, setImageChosen] = useState(false);
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+    });
+
+
+
+    const handleUpdate = async (token) => {
+        const rawResponse = await fetch(`${SERVER_URL}/user/`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                user: {
+                    name: name
+                }
+            })
+        });
+        const content = await rawResponse.json();
+        console.log(content);
+    }
+    const handleImage = async (token) => {
+        const rawResponse = await fetch(`${SERVER_URL}/user/`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                user: {
+                    dp: image.split(',')[1]
+                }
+            })
+        });
+        const content = await rawResponse.json();
+        console.log(content);
+    }
+    const fetchInfo = async (token) => {
+        const rawResponse = await fetch(`${SERVER_URL}/user/`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const content = await rawResponse.json();
+        console.log(content);
+        setName(content.user.name);
+        setImage(content.user.dp);
+    }
+
+    useEffect(() => {
+        fetchInfo(token);
+    }, [])
+
+
     return (
         <>
+            <Navbar name={"" || name} email={"email"} role={"role"} token={"token"} getter={() => { }} />
             {/*
         This example requires updating your template:
         ```
@@ -56,7 +140,18 @@ export default function Settings() {
       */}
             <div>
 
-                {/* Content area */}
+                <Notification
+                    heading={"Name updated!"}
+                    body={""}
+                    state={nameChangeNotification}
+                    getter={() => { setNameChangeNotification(false) }}
+                />
+                <Notification
+                    heading={"Profile picture updated!"}
+                    body={""}
+                    state={imageChangeNotification}
+                    getter={() => { setImageChangeNotification(false) }}
+                />
 
                 <div className="mx-auto flex max-w-4xl flex-col md:px-8 xl:px-0">
 
@@ -76,7 +171,7 @@ export default function Settings() {
                                             <select
                                                 id="selected-tab"
                                                 name="selected-tab"
-                                                className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                                                className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                                 defaultValue={tabs.find((tab) => tab.current).name}
                                             >
                                                 {tabs.map((tab) => (
@@ -93,7 +188,7 @@ export default function Settings() {
                                                             href={tab.href}
                                                             className={classNames(
                                                                 tab.current
-                                                                    ? 'border-blue-500 text-blue-600'
+                                                                    ? 'border-indigo-500 text-indigo-600'
                                                                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
                                                                 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
                                                             )}
@@ -116,13 +211,50 @@ export default function Settings() {
                                             <div className="mt-6">
                                                 <dl className="divide-y divide-gray-200">
                                                     <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                                                        <dt className="text-sm font-medium text-gray-500">Name</dt>
+                                                        <div className="flex flex-row items-center space-x-2">
+                                                            <dt className="text-sm font-medium text-gray-500">Name </dt>
+
+                                                            {saveStatus === `Name saving...` ?
+                                                                <svg className="animate-spin -ml-0.5 mr-1.5 w-5 h-5 fill-indigo-600" viewBox="3 3 18 18">
+                                                                    <path className="opacity-40" d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z">
+                                                                    </path>
+                                                                    <path d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z">
+                                                                    </path>
+                                                                </svg>
+                                                                :
+                                                                <></>
+                                                            }
+                                                        </div>
                                                         <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                                                            <span className="flex-grow">Chelsea Hagon</span>
-                                                            <span className="ml-4 flex-shrink-0">
+                                                            {nameToggle ?
+                                                                <input
+                                                                    value={name}
+                                                                    onChange={(e) => setName(e.target.value)}
+                                                                    id="name"
+                                                                    name="name"
+                                                                    type="text"
+                                                                    className="-my-3 w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                />
+                                                                :
+                                                                <span className="ml-3 flex-grow">{name}</span>
+                                                            }
+
+                                                            <span className={`ml-4 flex-shrink-0`}>
                                                                 <button
+                                                                    onClick={async () => {
+                                                                        if (nameToggle) {
+                                                                            setSaveStatus('Name saving...');
+                                                                            await handleUpdate(token);
+                                                                            setSaveStatus('Saved!');
+                                                                            setNameChangeNotification(true);
+                                                                            setTimeout(() => {
+                                                                                setNameChangeNotification(false);
+                                                                            }, 5000);
+                                                                        }
+                                                                        setNameToggle(nameToggle ^ true)
+                                                                    }}
                                                                     type="button"
-                                                                    className="rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                                    className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                                 >
                                                                     Update
                                                                 </button>
@@ -130,31 +262,74 @@ export default function Settings() {
                                                         </dd>
                                                     </div>
                                                     <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:pt-5">
-                                                        <dt className="text-sm font-medium text-gray-500">Photo</dt>
+                                                        <div className="flex flex-row items-center space-x-2">
+                                                            <dt className="text-sm font-medium text-gray-500">Photo </dt>
+
+                                                            {saveStatus === `Image saving...` ?
+                                                                <svg className="animate-spin -ml-0.5 mr-1.5 w-5 h-5 fill-indigo-600" viewBox="3 3 18 18">
+                                                                    <path className="opacity-40" d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z">
+                                                                    </path>
+                                                                    <path d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z">
+                                                                    </path>
+                                                                </svg>
+                                                                :
+                                                                <></>
+                                                            }
+                                                        </div>
                                                         <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                                                             <span className="flex-grow">
                                                                 <img
                                                                     className="h-8 w-8 rounded-full"
-                                                                    src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                                    src={`${image && image.includes('base64') ? image : 'data:image/png;base64,' + image}`}
                                                                     alt=""
                                                                 />
                                                             </span>
                                                             <span className="ml-4 flex flex-shrink-0 items-start space-x-4">
-                                                                <button
-                                                                    type="button"
-                                                                    className="rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                                <label
+                                                                    htmlFor="file-upload"
+                                                                    className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                                                                 >
-                                                                    Update
-                                                                </button>
-                                                                <span className="text-gray-300" aria-hidden="true">
-                                                                    |
-                                                                </span>
-                                                                <button
-                                                                    type="button"
-                                                                    className="rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                                                >
-                                                                    Remove
-                                                                </button>
+                                                                    <span>Chose file</span>
+                                                                    {/* <input id="file-upload" name="file-upload" type="file" className="sr-only" /> */}
+                                                                </label>
+                                                                <input
+                                                                    onInput={async (e) => {
+                                                                        setImage(await toBase64(e.target.files[0]));
+                                                                        setImageChosen(true);
+
+                                                                    }} id="file-upload" name="file-upload" type="file"
+                                                                    className="sr-only"
+                                                                    accept=".png, .jpeg, .jpg, .gif"
+
+                                                                />
+                                                                {imageChosen ?
+                                                                    <Fragment>
+                                                                        <span className="text-gray-300" aria-hidden="true">
+                                                                            |
+                                                                        </span>
+                                                                        <button
+                                                                            onClick={async () => {
+                                                                                setSaveStatus('Image saving...');
+                                                                                sessionStorage.removeItem('profile_image');
+                                                                                await handleImage(token);
+                                                                                setSaveStatus('Saved!');
+                                                                                setImageChangeNotification(true);
+                                                                                setTimeout(() => {
+                                                                                    setImageChangeNotification(false);
+                                                                                }, 5000);
+                                                                            }
+                                                                            }
+                                                                            type="button"
+                                                                            className="rounded-md bg-white font-semibold text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                                        >
+                                                                            Save changes
+                                                                        </button>
+                                                                    </Fragment>
+
+                                                                    :
+                                                                    <></>
+                                                                }
+
                                                             </span>
                                                         </dd>
                                                     </div>
@@ -165,7 +340,7 @@ export default function Settings() {
                                                             <span className="ml-4 flex-shrink-0">
                                                                 <button
                                                                     type="button"
-                                                                    className="rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                                    className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                                 >
                                                                     Update
                                                                 </button>
@@ -179,7 +354,7 @@ export default function Settings() {
                                                             <span className="ml-4 flex-shrink-0">
                                                                 <button
                                                                     type="button"
-                                                                    className="rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                                    className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                                 >
                                                                     Update
                                                                 </button>
@@ -206,7 +381,7 @@ export default function Settings() {
                                                             <span className="ml-4 flex-shrink-0">
                                                                 <button
                                                                     type="button"
-                                                                    className="rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                                    className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                                 >
                                                                     Update
                                                                 </button>
@@ -220,7 +395,7 @@ export default function Settings() {
                                                             <span className="ml-4 flex flex-shrink-0 items-start space-x-4">
                                                                 <button
                                                                     type="button"
-                                                                    className="rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                                    className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                                 >
                                                                     Update
                                                                 </button>
@@ -229,7 +404,7 @@ export default function Settings() {
                                                                 </span>
                                                                 <button
                                                                     type="button"
-                                                                    className="rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                                    className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                                 >
                                                                     Remove
                                                                 </button>
@@ -245,8 +420,8 @@ export default function Settings() {
                                                                 checked={automaticTimezoneEnabled}
                                                                 onChange={setAutomaticTimezoneEnabled}
                                                                 className={classNames(
-                                                                    automaticTimezoneEnabled ? 'bg-blue-600' : 'bg-gray-200',
-                                                                    'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-auto'
+                                                                    automaticTimezoneEnabled ? 'bg-indigo-600' : 'bg-gray-200',
+                                                                    'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:ml-auto'
                                                                 )}
                                                             >
                                                                 <span
@@ -271,8 +446,8 @@ export default function Settings() {
                                                                 checked={autoUpdateApplicantDataEnabled}
                                                                 onChange={setAutoUpdateApplicantDataEnabled}
                                                                 className={classNames(
-                                                                    autoUpdateApplicantDataEnabled ? 'bg-blue-600' : 'bg-gray-200',
-                                                                    'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-auto'
+                                                                    autoUpdateApplicantDataEnabled ? 'bg-indigo-600' : 'bg-gray-200',
+                                                                    'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:ml-auto'
                                                                 )}
                                                             >
                                                                 <span

@@ -13,10 +13,11 @@ export default function SignOut() {
         }
         // console.log(localStorage.getItem(examease_token));
         navigate('/login');
+        return;
 
     }, [])
 
     return (
-        <SignIn />
+        <></>
     )
 }

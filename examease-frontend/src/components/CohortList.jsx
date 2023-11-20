@@ -20,7 +20,7 @@ export default function CohortList(props) {
 
 
     return (
-        <div className='mx-auto'>
+        <div className='xs:mx-0 md:mx-32 mx-auto'>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="flex flex-row space-x-2">
                     <h2 className="text-sm font-medium text-gray-500">Currently enrolled cohorts</h2>

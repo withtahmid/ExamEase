@@ -9,6 +9,8 @@ import jwt_decode from "jwt-decode";
 import { SERVER_URL } from "../../variables";
 import Notification from "../components/Notification";
 
+import FlipCountdown from '@rumess/react-flip-countdown';
+
 
 function getColor(index) {
     const colors = ['bg-pink-600', 'bg-purple-600', 'bg-yellow-500', 'bg-green-500'];
@@ -80,16 +82,8 @@ export default function Dashboard() {
 
 
     const updCohorts = (newCohort) => {
+        console.log(token)
         fetchUser(token);
-        // setCohorts(cohorts.concat([{
-        //     id: newCohort.cohort._id,
-        //     name: newCohort.cohort.title,
-        //     description: newCohort.cohort.description,
-        //     initials: getInitials(newCohort.cohort.title),
-        //     href: `/cohort?c=${newCohort.cohort._id}`,
-        //     members: 0,
-        //     bgColor: getColor(newCohort.cohort.color)
-        // }]));
     }
 
     // console.log(token)
@@ -122,6 +116,7 @@ export default function Dashboard() {
         if (!('examease_token' in localStorage) && !('examease_token' in sessionStorage)) {
             console.log("bad")
             navigate('/signout');
+            return;
         }
 
         const decoded = jwt_decode(token);
@@ -141,12 +136,16 @@ export default function Dashboard() {
 
 
     return (
-        <div>
-            <Navbar name={name} email={email} role={role} token={token} getter={updCohorts} />
-            {cohorts && cohorts.length === 0 ? <Empty role={role} token={token} name={name} email={email} getter={updCohorts} /> : <CohortList cohorts={cohorts} faculty={name} role={role} />}
-            {/* <CohortList cohorts={cohorts} faculty={name} /> */}
+        <Fragment>
+            {token ?
+                <div>
+                    <Navbar name={name} email={email} role={role} token={token} getter={updCohorts} />
+                    {cohorts && cohorts.length === 0 ? <Empty role={role} token={token} name={name} email={email} getter={updCohorts} /> : <CohortList cohorts={cohorts} faculty={name} role={role} />}
+                    {/* <CohortList cohorts={cohorts} faculty={name} /> */}
 
-
-        </div>
+                </div>
+                : <></>
+            }
+        </Fragment>
     )
 }

@@ -48,6 +48,7 @@ ExamEase is an innovative platform designed to revolutionize the online examinat
     # Backend
     cd ../backend
     npm install
+    #Neuralend
     cd ../neuralend
     pip3 install -r requirements.txt
 ```
@@ -63,6 +64,7 @@ ExamEase is an innovative platform designed to revolutionize the online examinat
     # Backend   
     cd ../backend
     npm run dev
+    #Neuralend
     cd ../neuralend
     python3 app.py
 ```
@@ -104,7 +106,7 @@ git checkout -b feature-name
 The project was built from the ground up by:
 
 - **[Sarowar Alam Minhaj](https://github.com/sarwar76200)** - Frontend Developer
-- **[Md Tahmid Ahmed Rakib](https://github.com/withtahmid)** - Backend and AI Architect 
+- **[Md Tahmid Ahmed Rakib](https://github.com/withtahmid)** - Backend and AI Developer, Architect 
 
 ## References
 - [OpenAI Whisper](https://openai.com/index/whisper/)
